@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+  <fieldset>
+    <field name="id" type="text" readonly="true" class="readonly" default="0" description="JGLOBAL_FIELD_ID_DESC"/>    
+    <field name="contact_id" type="foreignkey" label="COM_CRM_CONTACTS_CONTACT_ID" description="COM_CRM_CONTACTS_CONTACT_ID_DESC" class="inputbox expo_contact" input_type="list" table="civicrm_bie_individuals_all" key_field="id" value_field="fullname" required="true" default="" where="type=0"/>
+    <field name="start_date" type="mycalendar" class="inputbox" required="true" readonly="false" label="COM_BIE_DELEGATE_LBL_DELEGATE_START_DATE" description="COM_BIE_DELEGATE_LBL_DELEGATE_START_DATE" hint="COM_BIE_DELEGATE_LBL_DELEGATE_START_DATE" format="%d/%m/%Y"/>
+    <field name="ordering"/>
+    <field name="state" default="1" type="list" label="JSTATUS" description="JFIELD_PUBLISHED_DESC" class="inputbox" size="1">
+      <option value="1">JPUBLISHED</option>
+      <option value="0">JUNPUBLISHED</option>
+    </field>
+    <field name="dups_informed" default="0" type="hidden" />    
+    <field name="checked_out" type="hidden" filter="unset"/>
+    <field name="checked_out_time" default="0000-00-00 00:00:00" type="hidden" filter="unset"/>
+    <field name="created_by" type="createdby" default="0" label="COM_CRM_CONTACTS_FORM_LBL_INDIVIDUAL_CREATED_BY" description="COM_CRM_CONTACTS_FORM_DESC_INDIVIDUAL_CREATED_BY" hidden="true" hint="COM_CRM_CONTACTS_FORM_LBL_INDIVIDUAL_CREATED_BY"/>
+    <field name="modified_by" type="modifiedby" default="0" label="COM_CRM_CONTACTS_FORM_LBL_INDIVIDUAL_MODIFIED_BY" description="COM_CRM_CONTACTS_FORM_DESC_INDIVIDUAL_MODIFIED_BY" hidden="true" hint="COM_CRM_CONTACTS_FORM_LBL_INDIVIDUAL_MODIFIED_BY"/>
+    <field name="version_note" type="text" label="JGLOBAL_FIELD_VERSION_NOTE_LABEL" description="JGLOBAL_FIELD_VERSION_NOTE_DESC" class="inputbox" size="45" labelclass="control-label"/>
+  </fieldset>
+</form>

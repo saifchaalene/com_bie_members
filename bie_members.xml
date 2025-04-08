@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<extension type="component" version="4.0" method="upgrade">
+    <name>com_bie_members</name>
+    <creationDate>2025-04-02</creationDate>
+    <copyright>2025 Tasos Triantis</copyright>
+    <license>GNU General Public License version 2 or later; see LICENSE.txt</license>
+    <author>Tasos Triantis</author>
+    <authorEmail>tasos.tr@gmail.com</authorEmail>
+    <authorUrl>http://</authorUrl>
+    <version>CVS: 1.0.0</version>
+    <description></description>
+    <namespace path="src">Combiemembers\Component\Bie_members</namespace>
+    
+    <scriptfile>script.php</scriptfile>
+    
+    <install> <!-- Runs on install -->
+        <sql>
+            <file driver="mysql" charset="utf8">sql/install.mysql.utf8.sql</file>
+        </sql>
+    </install>
+    <update> <!-- Runs on update -->
+        <schemas>
+            <schemapath type="mysql">sql/updates</schemapath>
+        </schemas>
+    </update>
+    <uninstall> <!-- Runs on uninstall -->
+        <sql>
+            <file driver="mysql" charset="utf8">sql/uninstall.mysql.utf8.sql</file>
+        </sql>
+    </uninstall>
+
+    
+
+    <files folder="site">
+        <folder>src</folder>
+        <folder>forms</folder>
+        <folder>tmpl</folder>
+    </files>
+    <media destination="com_bie_members" folder="media">
+        <folder>css</folder>
+        <folder>js</folder>
+        <filename>joomla.asset.json</filename>
+    </media>
+    <languages folder="site/languages">
+        
+			<language tag="ar-AA">ar-AA/com_bie_members.ini</language>
+			<language tag="en-GB">en-GB/com_bie_members.ini</language>
+			<language tag="fr-FR">fr-FR/com_bie_members.ini</language>
+    </languages>
+    <administration>
+        <menu>COM_BIE_MEMBERS</menu>
+        <submenu>
+            
+			<menu link="option=com_bie_members&amp;view=membersdelegates" view="membersdelegates" alt="Bie_members/Membersdelegates">COM_BIE_MEMBERS_TITLE_MEMBERSDELEGATES</menu>
+
+        </submenu>
+        <files folder="administrator">
+            <filename>access.xml</filename>
+            <filename>config.xml</filename>
+            <folder>forms</folder>
+            <folder>src</folder>
+            <folder>tmpl</folder>
+            <folder>services</folder>
+            <folder>presets</folder>
+            <folder>sql</folder>
+        </files>
+        <languages folder="administrator/languages">
+            
+			<language tag="ar-AA">ar-AA/com_bie_members.ini</language>
+			<language tag="ar-AA">ar-AA/com_bie_members.sys.ini</language>
+			<language tag="en-GB">en-GB/com_bie_members.ini</language>
+			<language tag="en-GB">en-GB/com_bie_members.sys.ini</language>
+			<language tag="fr-FR">fr-FR/com_bie_members.ini</language>
+			<language tag="fr-FR">fr-FR/com_bie_members.sys.ini</language>
+        </languages>
+    </administration>
+    <config>
+        <fields name="params">
+            <fieldset name="component">
+                <field name="save_history" default="0" />
+            </fieldset>
+        </fields>
+    </config>
+    <plugins>
+		<plugin group="finder" plugin="bie_membersmembersdelegates"/>
+    </plugins>
+    
+
+    <updateservers>
+        <server type="extension" priority="1" name="com_bie_members">https://nocdn.component-creator.com/index.php?task=builder.preupdatecheckhook&amp;option=com_combuilder&amp;component=NDU0MzUtMjE0ODM3</server>
+    </updateservers>
+</extension>
+<!-- Component built by the Joomla Component Creator -->
+<!-- http://www.component-creator.com/ -->

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form>
+    <fields name="filter">
+        <field name="search" type="text" hint="COM_BIE_MEMBERS_SEARCH_FILTER_SUBMIT"
+               label="COM_BIE_MEMBERS_SEARCH_FILTER_SUBMIT"
+               class="js-stools-search-string" />
+
+                
+        <field name="type" label="COM_BIE_MEMBERS_DELEGATES_TYPE" type="list" onchange="this.form.submit();" default="1">
+            <option value="">COM_BIE_MEMBERS_DELEGATES_TYPE_FILTER</option>
+            <option value="1">COM_BIE_MEMBERS_DELEGATES_TYPE_OPTION_1</option>
+            <option value="2">COM_BIE_MEMBERS_DELEGATES_TYPE_OPTION_2</option>
+            <option value="3">COM_BIE_MEMBERS_DELEGATES_TYPE_OPTION_3</option>
+          </field>
+
+            <field name="country" 
+                   type="foreignkey" 
+                   label="COM_BIE_MEMBERS_DELEGATES_COUNTRY" 
+                   description="" 
+                   class="inputbox" 
+                   input_type="list" 
+                   table="civicrm_member_states_distinct" 
+                   key_field="id" 
+                   value_field="name_fr" 
+                   default="" 
+                   order="name_fr ASC"
+                   onchange="this.form.submit();"
+            />            
+
+        <field name="gender_id" label="COM_BIE_MEMBERS_DELEGATES_GENDER_ID" type="list" onchange="this.form.submit();" default="">
+            <option value="">COM_BIE_MEMBERS_DELEGATES_GENDER_ID_FILTER</option>
+            <option value="1">COM_BIE_MEMBERS_DELEGATES_GENDER_ID_OPTION_1</option>
+            <option value="2">COM_BIE_MEMBERS_DELEGATES_GENDER_ID_OPTION_2</option>
+            <option value="4">COM_BIE_MEMBERS_DELEGATES_GENDER_ID_OPTION_4</option>
+          </field>
+
+        <field name="newsletter_type" 
+               label="COM_BIE_BULLETIN_BULLETININDIVIDUALS_NEWSLETTER_TITLE" 
+               description="COM_BIE_BULLETIN_BULLETININDIVIDUALS_NEWSLETTER_DESC" 
+               type="list" onchange="this.form.submit();" default="">
+            <option value="">COM_BIE_BULLETIN_BULLETININDIVIDUALS_NEWSLETTER_FILTER</option>
+            <option value="1">COM_BIE_BULLETIN_BULLETININDIVIDUALS_NEWSLETTER_STATUS_1</option>
+            <option value="2">COM_BIE_BULLETIN_BULLETININDIVIDUALS_NEWSLETTER_STATUS_0</option>            
+            <option value="4">COM_BIE_BULLETIN_BULLETININDIVIDUALS_NEWSLETTER_STATUS_4</option>
+            <option value="3">COM_BIE_BULLETIN_BULLETININDIVIDUALS_NEWSLETTER_STATUS_3</option>
+          </field>
+
+    </fields>
+    
+    <fields name="list">
+
+    </fields>
+    
+    
+    
+    <fields name="actions">
+
+        <field name="newsletter" label="COM_BIE_BULLETIN_FORM_LBL_BULLETININDIVIDUAL_NEWSLETTER" type="list" onchange="actionsNewsletter(this.value);" default="">
+            <option value="">COM_BIE_BULLETIN_FORM_LBL_BULLETININDIVIDUAL_NEWSLETTER_FILTER</option>
+            <option value="1">COM_BIE_BULLETIN_FORM_LBL_BULLETININDIVIDUAL_NEWSLETTER_SUBSCRIBE</option>
+            <option value="2">COM_BIE_BULLETIN_FORM_LBL_BULLETININDIVIDUAL_NEWSLETTER_UNSUBSCRIBE</option>
+          </field>
+                                                                                    
+    </fields>
+    
+</form>
