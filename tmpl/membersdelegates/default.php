@@ -29,7 +29,7 @@ HTMLHelper::addIncludePath($path . '/html/');
 HTMLHelper::_('bootstrap.tooltip');
 HTMLHelper::_('behavior.multiselect');
 HTMLHelper::_('formbehavior.chosen', 'select');
-HTMLHelper::addIncludePath(JPATH_LIBRARIES . '/cms/html'); // ✅ Add this line
+HTMLHelper::addIncludePath(JPATH_LIBRARIES . '/cms/html'); 
 
 // Import CSS
 $wa =  $this->document->getWebAssetManager();
