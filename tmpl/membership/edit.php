@@ -2,11 +2,9 @@
 /**
  * @version    CVS: 1.0.0
  * @package    Com_Bie_members
- * @author     Tasos Triantis <tasos.tr@gmail.com>
- * @copyright  2025 Tasos Triantis
+ * @author     Saif
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
-
 
 defined('_JEXEC') or die;
 
@@ -17,46 +15,58 @@ use Joomla\CMS\Router\Route;
 use Joomla\CMS\Session\Session;
 use Joomla\CMS\Uri\Uri;
 
-HTMLHelper::_('bootstrap.tooltip');
 HTMLHelper::_('behavior.formvalidator');
 HTMLHelper::_('behavior.keepalive');
-HTMLHelper::_('formbehavior.chosen', 'select');
-HTMLHelper::_('bootstrap.framework');
+
+// Tom Select for dropdowns
+HTMLHelper::_('script', 'media/vendor/tom-select/js/tom-select.complete.min.js', ['relative' => false]);
+HTMLHelper::_('stylesheet', 'media/vendor/tom-select/css/tom-select.bootstrap5.min.css', ['relative' => false]);
 
 $document = Factory::getDocument();
 $document->addStyleSheet(Uri::root() . 'media/com_bie_members/css/form.css');
-$ajaxUri = 'index.php?option=com_bie_members&task=membership.execute&format=json&' . Session::getFormToken() . '=1';
 ?>
-<script type="text/javascript">
-const js = jQuery.noConflict();
 
-js(document).ready(function () {
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+	const js = jQuery.noConflict();
 
-	// Capitalize first letter of first and last name
+	// Capitalize
 	js("#jform_first_name, #jform_last_name").on("keyup", function () {
-		if (js(this).val().length > 0) {
-			js(this).val(js(this).val().charAt(0).toUpperCase() + js(this).val().slice(1));
+		const val = js(this).val();
+		if (val.length > 0) {
+			js(this).val(val.charAt(0).toUpperCase() + val.slice(1));
 		}
 	});
 
-	document.formvalidator.setHandler("url", value => validatePattern(value, /https?:\/\/[\w\-]+(\.[\w\-]+)+([\w.,@?^=%&:/~+#\-]*[\w@?^=%&/~+#\-])?/, "is not a valid URL"));
-	document.formvalidator.setHandler("facebook", value => validatePattern(value, /https?:\/\/(\d+|[a-z\-]+)?\.facebook\.com\/(\d+|[A-Za-z0-9\.]+)\/?/, "is not a valid Facebook URL"));
-	document.formvalidator.setHandler("twitter", value => validatePattern(value, /https?:\/\/(www\.)?twitter\.com\/(\d+|[A-Za-z0-9\.]+)\/?/, "is not a valid Twitter URL"));
-	document.formvalidator.setHandler("number", value => validatePattern(value, /^\d*$/, "is not a valid number"));
-	document.formvalidator.setHandler("phone", value => validatePattern(value, /^\+?[0-9]{3}-?[0-9]{6,12}$/, "is not a valid phone number"));
+	// Tom Select init
+	['jform_contact_id', 'jform_prefix_id', 'jform_employer_id'].forEach(id => {
+		const el = document.getElementById(id);
+		if (el) {
+			new TomSelect(el, { create: false, plugins: ['remove_button'] });
+		}
+	});
 
-	function validatePattern(value, regex, message) {
+	// Validation handlers
+	const validatePattern = (value, regex, message) => {
 		const isValid = regex.test(value);
 		if (!isValid) displayError(value, message);
 		return isValid;
-	}
+	};
 
-	function displayError(value, message) {
-		const id = js(":input").filter(function () { return this.value === value; }).attr("id");
-		const label = js("#membership-form #" + id + "-lbl").text();
-		const error = { error: [`Field: <b>${label}</b> - value "${value}" ${message}`] };
+	const displayError = (value, message) => {
+		const id = jQuery(':input').filter(function () {
+			return this.value == value
+		}).attr('id');
+		const lbl = jQuery('#membership-form #' + id + '-lbl');
+		const error = { error: [`Field: <b>${lbl.text()}</b> - value "${value}" ${message}`] };
 		Joomla.renderMessages(error);
-	}
+	};
+
+	document.formvalidator.setHandler("url", v => validatePattern(v, /https?:\/\/[\w\-]+(\.[\w\-]+)+([\w.,@?^=%&:/~+#\-]*[\w@?^=%&/~+#\-])?/, "is not a valid URL"));
+	document.formvalidator.setHandler("facebook", v => validatePattern(v, /https?:\/\/(\d+|[a-z\-]+)?\.facebook\.com\/(\d+|[A-Za-z0-9\.]+)\/?/, "is not a valid Facebook URL"));
+	document.formvalidator.setHandler("twitter", v => validatePattern(v, /https?:\/\/(?:www\.)?twitter\.com\/(\d+|[A-Za-z0-9\.]+)\/?/, "is not a valid Twitter URL"));
+	document.formvalidator.setHandler("number", v => validatePattern(v, /^\d*$/, "is not a valid number"));
+	document.formvalidator.setHandler("phone", v => validatePattern(v, /^\+?[0-9]{3}-?[0-9]{6,12}$/, "is not a valid phone number"));
 
 	Joomla.submitbutton = function (task) {
 		if (task === 'membership.cancel' || document.formvalidator.isValid(document.getElementById('membership-form'))) {
@@ -68,40 +78,42 @@ js(document).ready(function () {
 });
 </script>
 
-<form action="<?php echo Route::_('index.php?option=com_bie_members&view=membership&layout=edit&id=' . (int) $this->item->id); ?>"
+<form
+	action="<?php echo Route::_('index.php?option=com_bie_members&view=membership&layout=edit&id=' . (int) $this->item->id); ?>"
 	method="post" enctype="multipart/form-data" name="adminForm" id="membership-form" class="form-validate">
 
-	<div class="form-horizontal">
+	<div class="container-fluid">
 		<?php echo HTMLHelper::_('bootstrap.startTabSet', 'myTab', ['active' => 'general']); ?>
-		<?php echo HTMLHelper::_('bootstrap.addTab', 'myTab', 'general', Text::_('COM_CRM_CONTACTS_CREATE_ORGANISATION_TAB_BASIC', true)); ?>
+		<?php echo HTMLHelper::_('bootstrap.addTab', 'myTab', 'general', Text::_('COM_CRM_CONTACTS_CREATE_ORGANISATION_TAB_BASIC')); ?>
 
-		<fieldset class="adminform">
-			<input type="hidden" name="jform[id]" value="<?php echo $this->item->id; ?>" />
+		<fieldset class="options-form">
 			<?php echo $this->form->renderField('prefix_id'); ?>
 			<?php foreach ((array) $this->item->prefix_id as $value) :
 				if (!is_array($value)) : ?>
 					<input type="hidden" class="prefix_id" name="jform[prefix_idhidden][<?php echo $value; ?>]" value="<?php echo $value; ?>" />
 				<?php endif;
 			endforeach; ?>
+
 			<?php echo $this->form->renderField('contact_id'); ?>
 			<?php echo $this->form->renderField('start_date'); ?>
-
-			<input type="hidden" name="jform[ordering]" value="<?php echo $this->item->ordering; ?>" />
-			<input type="hidden" name="jform[state]" value="<?php echo $this->item->state; ?>" />
-			<input type="hidden" name="jform[checked_out]" value="<?php echo $this->item->checked_out; ?>" />
-			<input type="hidden" name="jform[checked_out_time]" value="<?php echo $this->item->checked_out_time; ?>" />
-			<?php echo $this->form->renderField('created_by'); ?>
-			<?php echo $this->form->renderField('modified_by'); ?>
-
-			<?php if ($this->state->params->get('save_history', 1)) : ?>
-				<div class="control-group">
-					<div class="control-label"><?php echo $this->form->getLabel('version_note'); ?></div>
-					<div class="controls"><?php echo $this->form->getInput('version_note'); ?></div>
-				</div>
-			<?php endif; ?>
 		</fieldset>
+
 		<?php echo HTMLHelper::_('bootstrap.endTab'); ?>
 		<?php echo HTMLHelper::_('bootstrap.endTabSet'); ?>
+
+		<input type="hidden" name="jform[id]" value="<?php echo $this->item->id; ?>" />
+		<input type="hidden" name="jform[ordering]" value="<?php echo $this->item->ordering; ?>" />
+		<input type="hidden" name="jform[state]" value="<?php echo $this->item->state; ?>" />
+		<input type="hidden" name="jform[checked_out]" value="<?php echo $this->item->checked_out; ?>" />
+		<input type="hidden" name="jform[checked_out_time]" value="<?php echo $this->item->checked_out_time; ?>" />
+		<?php echo $this->form->renderField('created_by'); ?>
+		<?php echo $this->form->renderField('modified_by'); ?>
+
+		<?php if ($this->state->params->get('save_history', 1)) : ?>
+			<div class="mb-3">
+				<?php echo $this->form->renderField('version_note'); ?>
+			</div>
+		<?php endif; ?>
 
 		<input type="hidden" name="task" value="" />
 		<?php echo HTMLHelper::_('form.token'); ?>
