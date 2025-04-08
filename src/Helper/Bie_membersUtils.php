@@ -582,7 +582,7 @@ $db = Factory::getContainer()->get('DatabaseDriver');
     }
 
         public static function num_format($number,$decimals = 0) {
-        $lang = JFactory::getLanguage();
+        $lang = Factory::getLanguage();
         $tag = $lang->getTag();
         $l = explode("-", $tag);        
         
@@ -595,7 +595,7 @@ $db = Factory::getContainer()->get('DatabaseDriver');
 
     
     public static function encrypt($s) {
-            $privateKey = md5(JFactory::getConfig()->get('secret'));
+            $privateKey = md5(Factory::getConfig()->get('secret'));
             $key = new JCryptKey('simple', $privateKey, $privateKey);
             $_crypt = new JCrypt(new JCryptCipherSimple, $key);
             
@@ -606,7 +606,7 @@ $db = Factory::getContainer()->get('DatabaseDriver');
     
     public static function decrypt($s) {
             $s = str_replace("#", " ", $s);
-            $privateKey = md5(JFactory::getConfig()->get('secret'));
+            $privateKey = md5(Factory::getConfig()->get('secret'));
             $key = new JCryptKey('simple', $privateKey, $privateKey);
             $_crypt = new JCrypt(new JCryptCipherSimple, $key);
             
@@ -721,7 +721,7 @@ $db = Factory::getContainer()->get('DatabaseDriver');
 		}
 
 		$db->setQuery($query);
-		//JFactory::getApplication()->enqueueMessage($db->replacePrefix((string) $query), 'notice');
+		//Factory::getApplication()->enqueueMessage($db->replacePrefix((string) $query), 'notice');
 		$result = $db->loadResult();
 		if($result > 0) {
 			Factory::getApplication()->enqueueMessage("Mail ".$mail." is already in use on BOWS. The User has been saved but Please change his mail to something unique!!", 'warning');
@@ -752,7 +752,7 @@ $db = Factory::getContainer()->get('DatabaseDriver');
             ->where($db->quoteName('username') . " = " . $db->quote($username));
 
         $db->setQuery($query);
-        //JFactory::getApplication()->enqueueMessage($db->replacePrefix((string) $query), 'notice');
+        //Factory::getApplication()->enqueueMessage($db->replacePrefix((string) $query), 'notice');
         $result = $db->loadResult();
         if ($result > 0) {
             return true;
@@ -804,7 +804,7 @@ public static function updateMail($delegate) {
 		"block"=>1,
 	);
 
-	$user = JFactory::getUser($delegate->userid);
+	$user = Factory::getUser($delegate->userid);
 	$user->block = 1;
 
 	if (!$user->save()) {
@@ -837,7 +837,7 @@ public static function updateBOWSDelegate($delegate, $createNewPass = false) {
 	// 	$user->activation       = '';
 	// }
 
-	// $result = JFactory::getDbo()->updateObject('a9ys0_users', $user, 'id');
+	// $result = Factory::getDbo()->updateObject('a9ys0_users', $user, 'id');
 
 	// if (!$result) {
 	// 	//thronew Exception("Could not save user. Error: " . $user->getError());
@@ -854,9 +854,9 @@ public static function updateBOWSDelegate($delegate, $createNewPass = false) {
 
 public static function sendNewUSerMail ($delegate) {
     
-//     $config = JFactory::getConfig();
-//     $mailer = JFactory::getMailer();
-//     $application = JFactory::getApplication();
+//     $config = Factory::getConfig();
+//     $mailer = Factory::getMailer();
+//     $application = Factory::getApplication();
 //     $sender = array( 
 //         $config->get( 'mailfrom' ),
 //         $config->get( 'fromname' ) 
@@ -964,7 +964,7 @@ public function disableJoomlaUser($delegate,$mainframe,& $errormsgs=array()) {
           "block"=>1,
     );    
     
-    $user = JFactory::getUser($delegate->userid);
+    $user = Factory::getUser($delegate->userid);
     $user->block = 1;
    
       if (!$user->save()) {
@@ -1292,7 +1292,7 @@ public static function mbstring_binary_safe_encoding( $reset = false ) {
 //
 //        $rslt = Bie_membersUtils::alreadySubscribed($acymailid, $newsletter_id);
 //        if ($rslt != 3) {
-//            JFactory::getApplication()->enqueueMessage(JText::sprintf('COM_BIE_BULLETIN_FORM_LBL_BULLETININDIVIDUAL_NEWSLETTER_ALREADY_INLIST_'.$rslt,$name), 'warning');
+//            Factory::getApplication()->enqueueMessage(JText::sprintf('COM_BIE_BULLETIN_FORM_LBL_BULLETININDIVIDUAL_NEWSLETTER_ALREADY_INLIST_'.$rslt,$name), 'warning');
 //            return false;
 //        }
 
@@ -1354,13 +1354,13 @@ public static function mbstring_binary_safe_encoding( $reset = false ) {
         
 //        $acymailid = Bie_membersUtils::contactInAcymail($contact);
 //        if ($acymailid == 0) {
-//            JFactory::getApplication()->enqueueMessage(JText::sprintf('COM_BIE_BULLETIN_FORM_LBL_BULLETININDIVIDUAL_NEWSLETTER_ALREADY_INLIST_3',$name), 'warning');
+//            Factory::getApplication()->enqueueMessage(JText::sprintf('COM_BIE_BULLETIN_FORM_LBL_BULLETININDIVIDUAL_NEWSLETTER_ALREADY_INLIST_3',$name), 'warning');
 //            return false;
 //        }
 //
 //        $rslt = Bie_membersUtils::alreadySubscribed($acymailid, $newsletter_id);
 //        if ($rslt != 1) {
-//            JFactory::getApplication()->enqueueMessage(JText::sprintf('COM_BIE_BULLETIN_FORM_LBL_BULLETININDIVIDUAL_NEWSLETTER_ALREADY_INLIST_'.$rslt,$name), 'warning');
+//            Factory::getApplication()->enqueueMessage(JText::sprintf('COM_BIE_BULLETIN_FORM_LBL_BULLETININDIVIDUAL_NEWSLETTER_ALREADY_INLIST_'.$rslt,$name), 'warning');
 //            return false;
 //        }
 
@@ -1432,7 +1432,7 @@ public static function mbstring_binary_safe_encoding( $reset = false ) {
         $db->setQuery($query);
         $db->execute();
         $num_rows = $db->getNumRows();        
-        //JFactory::getApplication()->enqueueMessage($db->replacePrefix((string) $query), 'notice');
+        //Factory::getApplication()->enqueueMessage($db->replacePrefix((string) $query), 'notice');
         if($num_rows > 0) {
             $rslt = $db->loadResult();
             return intval($rslt);
@@ -1626,7 +1626,7 @@ public static function mbstring_binary_safe_encoding( $reset = false ) {
         $db->setQuery($query);
         $db->execute();
         $num_rows = $db->getNumRows();
-//        JFactory::getApplication()->enqueueMessage($db->replacePrefix((string) $query), 'notice');
+//        Factory::getApplication()->enqueueMessage($db->replacePrefix((string) $query), 'notice');
         if($num_rows > 0) {
             $rslt = $db->loadResult();
         } else {
@@ -1657,7 +1657,7 @@ public static function mbstring_binary_safe_encoding( $reset = false ) {
 //            return 3;
 //        }
 //
-//        $db = JFactory::getDbo();
+//        $db = Factory::getDbo();
 //        $query = $db->getQuery(true);
 //        $query->select(array('b.`status`'))
 //            ->from($db->quoteName('#__acym_user','a'))
@@ -1671,7 +1671,7 @@ public static function mbstring_binary_safe_encoding( $reset = false ) {
 //        $db->setQuery($query);
 //        $db->execute();
 //        $num_rows = $db->getNumRows();
-//        //JFactory::getApplication()->enqueueMessage($db->replacePrefix((string) $query), 'notice');
+//        //Factory::getApplication()->enqueueMessage($db->replacePrefix((string) $query), 'notice');
 //        if($num_rows > 0) {
 //            $rslt = $db->loadResult();
 //            return intval($rslt);

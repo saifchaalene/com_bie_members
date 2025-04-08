@@ -20,6 +20,7 @@ use Joomla\CMS\User\User;
 use Joomla\Database\DatabaseDriver;
 use Joomla\Utilities\ArrayHelper;
 use Joomla\CMS\Plugin\PluginHelper;
+use Combiemembers\Component\Bie_members\Administrator\Helper\Bie_membersUtils;
 
 class MembershipModel extends AdminModel
 {
@@ -108,21 +109,28 @@ class MembershipModel extends AdminModel
 		$app = Factory::getApplication();
 		$contact_id = ArrayHelper::getValue($data, 'contact_id', 0);
 		$start_date = ArrayHelper::getValue($data, 'start_date', '');
-
+	
 		if (empty($contact_id)) {
 			$this->setError('You have to select an Individual');
 			return false;
 		}
-
+	
 		if (empty($start_date)) {
 			$this->setError('You have to select a Start Date');
 			return false;
 		}
-
-		\Civi::initialize();
-		\Civi::apiKernel()->setApiParams(['conf_path' => JPATH_BASE . '/components/com_civicrm']);
-		$civicrm_user = Bie_membersUtils::getCiviCRMUser();
-
+	
+		if (!defined('CIVICRM_SETTINGS_PATH')) {
+			define('CIVICRM_SETTINGS_PATH', JPATH_ADMINISTRATOR . '/components/com_civicrm/civicrm.settings.php');
+		}
+		if (file_exists(CIVICRM_SETTINGS_PATH)) {
+			require_once CIVICRM_SETTINGS_PATH;
+		}
+		if (class_exists('CRM_Core_Config')) {
+			\CRM_Core_Config::singleton();
+		}
+		\CRM_Core_Config::singleton();
+	
 		$params = [
 			'contact_id' => $contact_id,
 			'membership_type_id' => 2,
@@ -130,40 +138,33 @@ class MembershipModel extends AdminModel
 			'is_override' => 1,
 			'start_date' => Bie_membersUtils::isodateformat($start_date),
 			'join_date' => Bie_membersUtils::isodateformat($start_date),
-			'userId' => $civicrm_user->contact_id,
 		];
-
-		$result = civicrm_api3('Membership', 'create', $params);
-		if (empty($result['id']) && empty($result['values'])) {
-			$this->setError('Membership creation failed');
+	
+		try {
+			$result = civicrm_api3('Membership', 'create', $params);
+		} catch (\CiviCRM_API3_Exception $e) {
+			$this->setError('Membership creation failed: ' . $e->getMessage());
 			return false;
 		}
-
-		$groupParams = [
-			'contact_id' => $contact_id,
-			'group_id' => 2,
-			'status' => 'added',
-		];
-
-		$result = civicrm_api3('GroupContact', 'create', $groupParams);
-		if (empty($result['id']) && empty($result['values'])) {
-			$this->setError('GroupContact creation failed');
+	
+		// Add to group
+		try {
+			$groupParams = [
+				'contact_id' => $contact_id,
+				'group_id' => 2,
+				'status' => 'Added',
+			];
+			civicrm_api3('GroupContact', 'create', $groupParams);
+		} catch (\CiviCRM_API3_Exception $e) {
+			$this->setError('GroupContact creation failed: ' . $e->getMessage());
 			return false;
 		}
-
-		if (Bie_membersUtils::createJoomlaUserByID($contact_id)) {
-			$app->enqueueMessage(Text::_('COM_BIE_DELEGATE_LBL_DELEGATE_BOWS_SUCCESS'), 'success');
-		} else {
-			$app->enqueueMessage(Text::_('COM_BIE_DELEGATE_LBL_DELEGATE_BOWS_ERROR'), 'error');
-		}
-
-		$url = 'index.php?option=com_civicrm&task=civicrm/contact/view&reset=1&tmpl=popup&cid=' . (int) $contact_id;
-		$view_url = '<a href="javascript:displayPopup(\'' . $url . '\');"> here </a>';
-		$msg = 'Successfully created contact. Click <b>' . $view_url . '</b> to view the contact';
-		$app->enqueueMessage($msg, 'notice');
-
+	
+		$app->enqueueMessage(Text::_('COM_BIE_MEMBERSHIP_SAVE_SUCCESS'), 'success');
+	
 		return true;
 	}
+
 
 	public function getContact($contact_id)
 	{
