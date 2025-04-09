@@ -74,7 +74,7 @@ class MembersdelegatesController extends AdminController
 	 *
 	 * @since   1.0.0
 	 */
-	public function getModel($name = 'Membersdelegate', $prefix = 'Administrator', $config = array())
+	public function getModel($name = 'Membersdelegates', $prefix = 'Administrator', $config = array())
 	{
 		return parent::getModel($name, $prefix, array('ignore_request' => true));
 	}
@@ -122,7 +122,7 @@ class MembersdelegatesController extends AdminController
 		$pks = $this->input->post->get('cid', [], 'array');
 		ArrayHelper::toInteger($pks);
 		$this->getModel()->exportxls($pks);
-		$this->setRedirect(Route::_('index.php?option=com_bie_members&view=delegates', false));
+		$this->setRedirect(Route::_('index.php?option=com_bie_members&view=membersdelegates', false));
 	}
 
 	public function outlook()
@@ -130,7 +130,7 @@ class MembersdelegatesController extends AdminController
 		$pks = $this->input->post->get('cid', [], 'array');
 		ArrayHelper::toInteger($pks);
 		$this->getModel()->exportToOutlook($pks);
-		$this->setRedirect(Route::_('index.php?option=com_bie_members&view=delegates', false));
+		$this->setRedirect(Route::_('index.php?option=com_bie_members&view=membersdelegates', false));
 	}
 
 	public function labels()
@@ -138,7 +138,7 @@ class MembersdelegatesController extends AdminController
 		$pks = $this->input->post->get('cid', [], 'array');
 		ArrayHelper::toInteger($pks);
 		$this->getModel()->labels($pks);
-		$this->setRedirect(Route::_('index.php?option=com_bie_members&view=delegates', false));
+		$this->setRedirect(Route::_('index.php?option=com_bie_members&view=membersdelegates', false));
 	}
 
 	public function labelscountry()
@@ -146,7 +146,7 @@ class MembersdelegatesController extends AdminController
 		$pks = $this->input->post->get('cid', [], 'array');
 		ArrayHelper::toInteger($pks);
 		$this->getModel()->labels($pks, true);
-		$this->setRedirect(Route::_('index.php?option=com_bie_members&view=delegates', false));
+		$this->setRedirect(Route::_('index.php?option=com_bie_members&view=membersdelegates', false));
 	}
 
 	public function loginmail()
@@ -172,7 +172,7 @@ class MembersdelegatesController extends AdminController
 				Factory::getApplication()->enqueueMessage(Text::sprintf('COM_BIE_MEMBERS_EDIT_DELEGATE_RESEND_MAIL', $delegate['name'], $delegate['email']), 'message');
 			}
 		}
-		$this->setRedirect(Route::_('index.php?option=com_bie_members&view=delegates', false));
+		$this->setRedirect(Route::_('index.php?option=com_bie_members&view=membersdelegates', false));
 	}
 
 	public function updatebows()
@@ -198,21 +198,21 @@ class MembersdelegatesController extends AdminController
 
 			Factory::getApplication()->enqueueMessage($message, $result ? 'message' : 'warning');
 		}
-		$this->setRedirect(Route::_('index.php?option=com_bie_members&view=delegates', false));
+		$this->setRedirect(Route::_('index.php?option=com_bie_members&view=membersdelegates', false));
 	}
 
 	public function initmail()
 	{
 		Bie_membersUtils::initDelegatesMailingListBOWS();
 		Factory::getApplication()->enqueueMessage(Text::_('COM_BIE_MEMBERS_MAILING_LIST_UPDATED'), 'message');
-		$this->setRedirect(Route::_('index.php?option=com_bie_members&view=delegates', false));
+		$this->setRedirect(Route::_('index.php?option=com_bie_members&view=membersdelegates', false));
 	}
 
 	public function syncBows()
 	{
 		Bie_membersUtils::syncLocalCopyDelegatesBOWSUsers();
 		Factory::getApplication()->enqueueMessage(Text::_('COM_BIE_MEMBERS_SYNC_SUCCESS'), 'message');
-		$this->setRedirect(Route::_('index.php?option=com_bie_members&view=delegates', false));
+		$this->setRedirect(Route::_('index.php?option=com_bie_members&view=membersdelegates', false));
 	}
 
 	public function deletebowsuser()
@@ -228,7 +228,7 @@ class MembersdelegatesController extends AdminController
 		} catch (\Exception $e) {
 			Factory::getApplication()->enqueueMessage($e->getMessage(), 'warning');
 		}
-		$this->setRedirect(Route::_('index.php?option=com_bie_members&view=delegates', false));
+		$this->setRedirect(Route::_('index.php?option=com_bie_members&view=membersdelegates', false));
 	}
 
 	public function createbowsuser()
@@ -249,7 +249,7 @@ class MembersdelegatesController extends AdminController
 				}
 			}
 		}
-		$this->setRedirect(Route::_('index.php?option=com_bie_members&view=delegates', false));
+		$this->setRedirect(Route::_('index.php?option=com_bie_members&view=membersdelegates', false));
 	}
 
 	public function denounce()
@@ -285,7 +285,7 @@ class MembersdelegatesController extends AdminController
 		if ((int) $action === 1) {
 			$this->getModel()->actionOnNewsletter($pks, $action);
 		}
-		$this->setRedirect(Route::_('index.php?option=com_bie_members&view=delegates', false));
+		$this->setRedirect(Route::_('index.php?option=com_bie_members&view=membersdelegates', false));
 	}
 
 	public function unsubscribenewsletter()
@@ -297,6 +297,6 @@ class MembersdelegatesController extends AdminController
 		if ((int) $action === 2) {
 			$this->getModel()->actionOnNewsletter($pks, $action);
 		}
-		$this->setRedirect(Route::_('index.php?option=com_bie_members&view=delegates', false));
+		$this->setRedirect(Route::_('index.php?option=com_bie_members&view=membersdelegates', false));
 	}
 }

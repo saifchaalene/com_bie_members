@@ -10,6 +10,7 @@
 namespace Combiemembers\Component\Bie_members\Administrator\Model;
 // No direct access.
 defined('_JEXEC') or die;
+require_once JPATH_ADMINISTRATOR . '/components/com_civicrm/civicrm/vendor/autoload.php';
 
 use \Joomla\CMS\MVC\Model\ListModel;
 use \Joomla\Component\Fields\Administrator\Helper\FieldsHelper;
@@ -18,14 +19,14 @@ use \Joomla\CMS\Language\Text;
 use \Joomla\CMS\Helper\TagsHelper;
 use \Joomla\Database\ParameterType;
 use \Joomla\Utilities\ArrayHelper;
-use Combiemembers\Component\Bie_members\Administrator\Helper\Bie_membersHelper;
 use Joomla\CMS\Router\Route;
-use Combiemembers\Component\Bie_members\Administrator\Helper\Bie_membersUtils;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Filesystem\Path;
 use Joomla\CMS\Filesystem\File;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Combiemembers\Component\Bie_members\Administrator\Helper\Bie_membersUtils;
+use Combiemembers\Component\Bie_members\Administrator\Helper\Bie_membersHelper;
 
 
 
@@ -183,7 +184,7 @@ class MembersdelegatesModel extends ListModel
 	
 	protected function getListQuery()
 {
-	$app  = \Joomla\CMS\Factory::getApplication();
+	$app  = Factory::getApplication();
 	$db    = $this->getDbo();
 	$query = $db->getQuery(true);
 
@@ -426,7 +427,6 @@ public function getItems()
 
 public function exportxls($pks)
 {
-    // Init PHPSpreadsheet (replacement for PHPExcel)
     $spreadsheet = new Spreadsheet();
     $sheet = $spreadsheet->getActiveSheet();
 
@@ -511,6 +511,117 @@ public function exportxls($pks)
     $url = Uri::root() . 'tmp/' . $filename;
    // Factory::getApplication()->enqueueMessage(Text::sprintf('COM_BIE_MEMBERS_DOWNLOAD_FILE', $url), 'notice');
 }
+
+public function exportToOutlook(array $pks): void
+{
+    $this->populateState('a.country', 'asc');
+
+    $db = Factory::getDbo();
+    $query = $this->getListQuery();
+    $db->setQuery($query);
+    $items = $db->loadObjectList();
+
+    $finalItems = [];
+    if (!empty($pks)) {
+        foreach ($items as $item) {
+            if (in_array($item->id, $pks)) {
+                $finalItems[] = $item;
+            }
+        }
+    } else {
+        $finalItems = $items;
+    }
+
+    $lines = [
+        [
+            "Title", "First Name", "Last Name", "Company", "Job Title",
+            "E-mail Address", "E-mail 2 Address", "E-mail 3 Address",
+            "Business Phone", "Business Phone 2", "Other Phone",
+            "Business Street", "Business City", "Business Postal Code", "Business Country/Region"
+        ]
+    ];
+
+    foreach ($finalItems as $row) {
+        $c = $this->getContact((int) $row->id);
+
+        $prefixKey = "label_" . $row->preferred_language;
+        $prefix = $row->$prefixKey ?? '';
+
+        $mails = explode(",", $this->getMails((int) $row->id, false, ","));
+        $mail1 = $mails[0] ?? '';
+        $mail2 = $mails[1] ?? '';
+        $mail3 = $mails[2] ?? '';
+
+        $phones = explode(",", $this->getPhones((int) $row->id, ","));
+        $phone1 = $phones[0] ?? '';
+        $phone2 = $phones[1] ?? '';
+        $phone3 = $phones[2] ?? '';
+
+        $lines[] = [
+            $prefix,
+            $row->first_name,
+            $row->last_name,
+            $row->country,
+            $row->job_title,
+            $mail1,
+            $mail2,
+            $mail3,
+            $phone1,
+            $phone2,
+            $phone3,
+            $c->street_address ?? '',
+            $c->city ?? '',
+            $c->postal_code ?? '',
+            $c->country ?? ''
+        ];
+    }
+
+    $tmpPath = Factory::getConfig()->get('tmp_path');
+    $fileName = 'delegates_outlook_' . time() . '.csv';
+    $filePath = Path::clean($tmpPath . '/' . $fileName);
+
+    $fp = fopen($filePath, 'w');
+    foreach ($lines as $fields) {
+        fputcsv($fp, $fields);
+    }
+    fclose($fp);
+
+    $url = Uri::root() . 'tmp/' . $fileName;
+    Factory::getApplication()->enqueueMessage(Text::sprintf('COM_BIE_MEMBERS_DOWNLOAD_FILE', $url), 'notice');
+}
+
+
+public function getContact($contact_id)
+{
+    if (!defined('CIVICRM_SETTINGS_PATH')) {
+        define('CIVICRM_SETTINGS_PATH', JPATH_ADMINISTRATOR . '/components/com_civicrm/civicrm.settings.php');
+    }
+
+    if (!defined('CIVICRM_CORE_PATH')) {
+        define('CIVICRM_CORE_PATH', JPATH_ADMINISTRATOR . '/components/com_civicrm/civicrm/');
+    }
+
+    require_once CIVICRM_SETTINGS_PATH;
+    require_once CIVICRM_CORE_PATH . 'CRM/Core/Config.php';
+
+    \CRM_Core_Config::singleton();
+
+    try {
+        $result = civicrm_api3('Contact', 'get', [
+            'contact_id' => $contact_id,
+            'sequential' => 1,
+        ]);
+
+        if (!empty($result['values'][0])) {
+            return (object) $result['values'][0]; // Retourne l'objet contact
+        }
+    } catch (Exception $e) {
+        Factory::getApplication()->enqueueMessage('Erreur CiviCRM : ' . $e->getMessage(), 'error');
+    }
+
+    return false;
+}
+
 
 
 }
