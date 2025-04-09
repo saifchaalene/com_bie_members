@@ -62,7 +62,7 @@ class MembershipController extends FormController
 		$return = parent::cancel($key, $urlVar);
 
 		$this->setRedirect(
-			Route::_('index.php?option=com_bie_members&view=delegates', false)
+			Route::_('index.php?option=com_bie_members&view=membersdelegates', false)
 		);
 
 		return $return;

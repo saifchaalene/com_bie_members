@@ -35,8 +35,8 @@ class Bie_membersHelper
 	{
 		Sidebar::addEntry(
 			Text::_('COM_BIE_MEMBERS_TITLE_DELEGATES'),
-			'index.php?option=com_bie_members&view=delegates',
-			$vName === 'delegates'
+			'index.php?option=com_bie_members&view=membersdelegates',
+			$vName === 'membersdelegates'
 		);
 
 		Sidebar::addEntry(

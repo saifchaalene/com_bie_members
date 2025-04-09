@@ -40,6 +40,11 @@
                default="25"
                onchange="this.form.submit();"
         />
+<field name="gender_id" type="list" label="COM_BIE_MEMBERS_FILTER_GENDER_ID" onchange="this.form.submit();">
+    <option value="">JOPTION_SELECT</option>
+    <option value="1">COM_BIE_MEMBERS_DELEGATES_GENDER_ID_OPTION_1</option>
+    <option value="2">COM_BIE_MEMBERS_DELEGATES_GENDER_ID_OPTION_2</option>
+</field>
 
     </fields>
 

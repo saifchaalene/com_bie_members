@@ -109,7 +109,7 @@ class HtmlView extends BaseHtmlView
 			ToolbarHelper::preferences('com_bie_members');
 		}
 
-		HTMLHelper::_('sidebar.setAction', 'index.php?option=com_bie_members&view=delegates');
+		HTMLHelper::_('sidebar.setAction', 'index.php?option=com_bie_members&view=membersdelegates');
 	}
 
 	/**

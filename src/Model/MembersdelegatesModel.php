@@ -23,11 +23,12 @@ use Joomla\CMS\Router\Route;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Filesystem\Path;
 use Joomla\CMS\Filesystem\File;
+use  \Joomla\CMS\Component\ComponentHelper;
+
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Combiemembers\Component\Bie_members\Administrator\Helper\Bie_membersUtils;
 use Combiemembers\Component\Bie_members\Administrator\Helper\Bie_membersHelper;
-
 
 
 /**
@@ -142,7 +143,7 @@ class MembersdelegatesModel extends ListModel
 		$this->setState('filter.newsletter_type', $app->getUserStateFromRequest($this->context . '.filter.newsletter_type', 'filter_newsletter_type', '', 'string'));
 	
 		// Load the parameters
-		$params = \Joomla\CMS\Component\ComponentHelper::getParams('com_bie_members');
+		$params = ComponentHelper::getParams('com_bie_members');
 		$this->setState('params', $params);
 	
 		// Default list ordering
@@ -338,8 +339,8 @@ public function getItems()
         $db = $this->getDBO();
         $query = $db->getQuery(true);        
 	$query->select('count(a.id)')
-              ->from('`civicrm_member_states` AS a')
-              ->where("a.`type_id` = '1'");
+    ->from($db->quoteName('civicrm_member_states', 'a'))
+    ->where("a.`type_id` = '1'");
         $db->setQuery($query);                
         return $db->loadResult();        
      }   
@@ -347,8 +348,8 @@ public function getItems()
         $db = $this->getDBO();
         $query = $db->getQuery(true);        
 	$query->select('count(a.id)')
-              ->from('`civicrm_member_states` AS a')
-              ->where("a.`type_id` = '1'")
+    ->from($db->quoteName('civicrm_member_states', 'a'))
+    ->where("a.`type_id` = '1'")
               ->where("a.`right_vote` = '1'");  
         $db->setQuery($query);                
         return $db->loadResult();        
