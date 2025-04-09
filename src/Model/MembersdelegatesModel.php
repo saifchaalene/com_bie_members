@@ -261,8 +261,8 @@ class MembersdelegatesModel extends ListModel
 		$query->order($db->escape($orderCol . ' ' . $orderDirn));
 	}
 
-	$app->enqueueMessage((string) $query, 'notice');
-	Factory::getApplication()->enqueueMessage($db->replacePrefix((string) $query), 'notice');
+	//$app->enqueueMessage((string) $query, 'notice');
+	//Factory::getApplication()->enqueueMessage($db->replacePrefix((string) $query), 'notice');
 
 	return $query;
 }
@@ -317,7 +317,7 @@ public function getItems()
     }
 
     if (!empty($items)) {
-        Factory::getApplication()->enqueueMessage('<pre>' . print_r($items[0], true) . '</pre>', 'notice');
+       // Factory::getApplication()->enqueueMessage('<pre>' . print_r($items[0], true) . '</pre>', 'notice');
     }
 
     return $items;
@@ -509,7 +509,7 @@ public function exportxls($pks)
     $writer->save($filePath);
 
     $url = Uri::root() . 'tmp/' . $filename;
-    Factory::getApplication()->enqueueMessage(Text::sprintf('COM_BIE_MEMBERS_DOWNLOAD_FILE', $url), 'notice');
+   // Factory::getApplication()->enqueueMessage(Text::sprintf('COM_BIE_MEMBERS_DOWNLOAD_FILE', $url), 'notice');
 }
 
 

@@ -11,13 +11,14 @@ namespace Combiemembers\Component\Bie_members\Administrator\Helper;
 
 defined('_JEXEC') or die;
 
-require_once JPATH_ROOT . "/administrator/components/com_civicrm/civicrm/api/class.api.php";
 use Joomla\CMS\Factory;
 use Joomla\CMS\Router\Route;
 use Joomla\CMS\Uri\Uri;
 use Joomla\CMS\Component\ComponentHelper;
 use Joomla\CMS\User\UserFactoryInterface;
 use Joomla\Database\DatabaseDriver;
+use Joomla\Registry\Registry;
+use Joomla\CMS\Date\Date as JDate;
 
 
 class Bie_membersUtils
@@ -594,25 +595,9 @@ $db = Factory::getContainer()->get('DatabaseDriver');
     }
 
     
-    public static function encrypt($s) {
-            $privateKey = md5(Factory::getConfig()->get('secret'));
-            $key = new JCryptKey('simple', $privateKey, $privateKey);
-            $_crypt = new JCrypt(new JCryptCipherSimple, $key);
-            
-            return $_crypt->encrypt($s);        
-        
-    }
+ 
     
     
-    public static function decrypt($s) {
-            $s = str_replace("#", " ", $s);
-            $privateKey = md5(Factory::getConfig()->get('secret'));
-            $key = new JCryptKey('simple', $privateKey, $privateKey);
-            $_crypt = new JCrypt(new JCryptCipherSimple, $key);
-            
-            return $_crypt->decrypt($s);        
-        
-    }   
     
     public static function dateformat($date){
          $d = explode("-", $date);
@@ -796,26 +781,6 @@ public static function getExtraFields($entity_id) {
 }
 
 
-public static function updateMail($delegate) {
-	jimport('joomla.user.helper');
-
-	$data = array(
-		"id"=>$delegate->userid,
-		"block"=>1,
-	);
-
-	$user = Factory::getUser($delegate->userid);
-	$user->block = 1;
-
-	if (!$user->save()) {
-		//throw new Exception("Could not save user. Error: " . $user->getError());
-		$errormsgs[] = "Error Saving: ".implode("::", $data)." :: Description: ".$user->getError();
-		return 0;
-	}
-
-	return $user->id;
-
-}
 
 
 public static function updateBOWSDelegate($delegate, $createNewPass = false) {
@@ -956,27 +921,6 @@ public static function sendNewUSerMail ($delegate) {
     
 }
 
-public function disableJoomlaUser($delegate,$mainframe,& $errormsgs=array()) {
-    jimport('joomla.user.helper');    
-    
-    $data = array(
-          "id"=>$delegate->userid,
-          "block"=>1,
-    );    
-    
-    $user = Factory::getUser($delegate->userid);
-    $user->block = 1;
-   
-      if (!$user->save()) {
-          //throw new Exception("Could not save user. Error: " . $user->getError());
-          $errormsgs[] = "Error Saving: ".implode("::", $data)." :: Description: ".$user->getError();
-          return 0;
-      }
-
-  return $user->id;
-    
-    
-} 
 
 
 public static function remove_accents($string) {

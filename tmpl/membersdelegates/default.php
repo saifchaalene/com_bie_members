@@ -29,7 +29,7 @@ HTMLHelper::addIncludePath($path . '/html/');
 HTMLHelper::_('bootstrap.tooltip');
 HTMLHelper::_('behavior.multiselect');
 HTMLHelper::_('formbehavior.chosen', 'select');
-HTMLHelper::addIncludePath(JPATH_LIBRARIES . '/cms/html'); 
+HTMLHelper::addIncludePath(JPATH_LIBRARIES . '/cms/html'); // ✅ Add this line
 
 // Import CSS
 $wa =  $this->document->getWebAssetManager();
@@ -72,6 +72,7 @@ $this->filters = ['view' => $this];
 
 <form action="<?php echo JRoute::_('index.php?option=com_bie_members&view=membersdelegate&layout=edit'); ?>" method="post"
       name="adminForm" id="adminForm">
+      <?php echo LayoutHelper::render('joomla.searchtools.default', ['view' => $this]); ?>
 
 
     <div id="j-main-container">
