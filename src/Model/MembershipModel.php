@@ -67,34 +67,55 @@ class MembershipModel extends AdminModel
 
 	public function duplicate(&$pks)
 	{
-		$user = Factory::getApplication()->getIdentity();
+		$user = Factory::getUser();
 
-		if (!$user->authorise('core.create', 'com_bie_members')) {
-			throw new \Exception(Text::_('JERROR_CORE_CREATE_NOT_PERMITTED'));
+		// Access checks.
+		if (!$user->authorise('core.create', 'com_bie_members'))
+		{
+			throw new Exception(JText::_('JERROR_CORE_CREATE_NOT_PERMITTED'));
 		}
 
-		PluginHelper::importPlugin($this->events_map['save']);
+		$dispatcher = EventDispatcher::getInstance();
+		$context    = $this->option . '.' . $this->name;
+
+		// Include the plugins for the save events.
+		JPluginHelper::importPlugin($this->events_map['save']);
+
 		$table = $this->getTable();
 
-		foreach ($pks as $pk) {
-			if ($table->load($pk, true)) {
+		foreach ($pks as $pk)
+		{
+			if ($table->load($pk, true))
+			{
+				// Reset the id to create a new record.
 				$table->id = 0;
 
-				if (!$table->check()) {
-					throw new \Exception($table->getError());
+				if (!$table->check())
+				{
+					throw new Exception($table->getError());
+				}
+				
+
+				// Trigger the before save event.
+				$result = $dispatcher->trigger($this->event_before_save, array($context, &$table, true));
+
+				if (in_array(false, $result, true) || !$table->store())
+				{
+					throw new Exception($table->getError());
 				}
 
-				$table->employer_id = is_array($table->employer_id) ? implode(',', $table->employer_id) : ($table->employer_id ?? '');
-
-				if (!$table->store()) {
-					throw new \Exception($table->getError());
-				}
-			} else {
-				throw new \Exception($table->getError());
+				// Trigger the after save event.
+				$dispatcher->trigger($this->event_after_save, array($context, &$table, true));
+			}
+			else
+			{
+				throw new Exception($table->getError());
 			}
 		}
 
+		// Clean cache
 		$this->cleanCache();
+
 		return true;
 	}
 

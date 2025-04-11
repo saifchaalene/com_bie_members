@@ -68,7 +68,7 @@ class HtmlView extends BaseHtmlView
 			throw new Exception(implode("\n", $errors));
 		}
 
-		Bie_membersHelper::addSubmenu('delegates');
+		Bie_membersHelper::addSubmenu('membersdelegates');
 		$this->addToolbar();
 		$this->sidebar = HTMLHelper::_('sidebar.render');
 		parent::display($tpl);
@@ -87,7 +87,7 @@ class HtmlView extends BaseHtmlView
 		ToolbarHelper::title(Text::_('COM_BIE_MEMBERS_TITLE_DELEGATES'), 'users');
 
 		if (Bie_membersUtils::allowEditDelegates()) {
-			ToolbarHelper::addNew('membersdelegates.edit', 'New Delegate/ New Person');
+			ToolbarHelper::custom('membersdelegate.add', 'new', '', 'New Delegate / New Person', false);
 			ToolbarHelper::addNew('membership.edit', 'New Delegate/ Existing Person');
 			ToolbarHelper::custom('membersdelegates.denounce', 'exit', '', 'Denounce Delegate', false);
 			ToolbarHelper::custom('membersdelegates.reannounce', 'enter', '', 'Re-Announce Former Delegate', false);

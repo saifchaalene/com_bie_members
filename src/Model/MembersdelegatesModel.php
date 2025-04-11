@@ -148,6 +148,7 @@ class MembersdelegatesModel extends ListModel
 	
 		// Default list ordering
 		parent::populateState('a.country', 'ASC');
+        
 	}
 	
 

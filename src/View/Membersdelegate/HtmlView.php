@@ -16,6 +16,8 @@ use \Joomla\CMS\Toolbar\ToolbarHelper;
 use \Joomla\CMS\Factory;
 use \Combiemembers\Component\Bie_members\Administrator\Helper\Bie_membersHelper;
 use \Joomla\CMS\Language\Text;
+use Combiemembers\Component\Bie_members\Administrator\Helper\Bie_membersUtils;
+use Joomla\CMS\Router\Route;
 
 /**
  * View class for a single Membersdelegate.
@@ -44,16 +46,43 @@ class HtmlView extends BaseHtmlView
 		$this->state = $this->get('State');
 		$this->item  = $this->get('Item');
 		$this->form  = $this->get('Form');
-
 		// Check for errors.
 		if (count($errors = $this->get('Errors')))
 		{
-			throw new \Exception(implode("\n", $errors));
+			throw new Exception(implode("\n", $errors));
 		}
-				$this->addToolbar();
-		
+                
+                $input = Factory::getApplication()->input;
+				$layout = (string)$input->get('layout', '');
+
+                if ($this->item->id && $layout == 'reannounce' && $this->item->type != 2) {
+
+                    Factory::getApplication()->enqueueMessage(Text::sprintf('COM_BIE_MEMBERS_EDIT_DELEGATE_IS_NOT_FORMER_DELEGATE',$this->item->first_name.' '.$this->item->last_name), 'error');
+                    Factory::getApplication()->redirect(Route::_('index.php?option=com_bie_members&view=membersdelegates', false));
+                    return false;
+
+                }
+
+                if ($this->item->id && $layout == 'denounce' && $this->item->type != 1) {
+
+                    Factory::getApplication()->enqueueMessage(Text::sprintf('COM_BIE_MEMBERS_EDIT_DELEGATE_IS_NOT_DELEGATE',$this->item->first_name.' '.$this->item->last_name), 'error');
+                    Factory::getApplication()->redirect(Route::_('index.php?option=com_bie_members&view=membersdelegates', false));
+                    return false;
+
+                }
+                
+                
+                if ($this->item->id && $layout == 'denounce') {
+                    $this->form->setFieldAttribute('end_date','readonly','false'); 
+                }
+                if ($this->item->id && $layout == 'reannounce') {
+                    $this->form->setFieldAttribute('start_date','readonly','false'); 
+                }
+                
+		$this->addToolbar();
 		parent::display($tpl);
 	}
+
 
 	/**
 	 * Add the page title and toolbar.
@@ -65,8 +94,9 @@ class HtmlView extends BaseHtmlView
 	protected function addToolbar()
 	{
 		Factory::getApplication()->input->set('hidemainmenu', true);
+                 $layout = Factory::getApplication()->input->get('layout');
 
-		$user  = Factory::getApplication()->getIdentity();
+		$user  = Factory::getUser();
 		$isNew = ($this->item->id == 0);
 
 		if (isset($this->item->checked_out))
@@ -80,35 +110,23 @@ class HtmlView extends BaseHtmlView
 
 		$canDo = Bie_membersHelper::getActions();
 
-		ToolbarHelper::title(Text::_('COM_BIE_MEMBERS_TITLE_MEMBERSDELEGATE'), "generic");
+		ToolBarHelper::title(Text::_('COM_BIE_MEMBERS_TITLE_DELEGATE'), 'delegate.png');
 
 		// If not checked out, can save the item.
-		if (!$checkedOut && ($canDo->get('core.edit') || ($canDo->get('core.create'))))
-		{
-			ToolbarHelper::apply('membersdelegate.apply', 'JTOOLBAR_APPLY');
-			ToolbarHelper::save('membersdelegate.save', 'JTOOLBAR_SAVE');
-		}
-
-		if (!$checkedOut && ($canDo->get('core.create')))
-		{
-			ToolbarHelper::custom('membersdelegate.save2new', 'save-new.png', 'save-new_f2.png', 'JTOOLBAR_SAVE_AND_NEW', false);
-		}
-
-		// If an existing item, can save to a copy.
-		if (!$isNew && $canDo->get('core.create'))
-		{
-			ToolbarHelper::custom('membersdelegate.save2copy', 'save-copy.png', 'save-copy_f2.png', 'JTOOLBAR_SAVE_AS_COPY', false);
-		}
-
-		
-
 		if (empty($this->item->id))
 		{
-			ToolbarHelper::cancel('membersdelegate.cancel', 'JTOOLBAR_CANCEL');
+			ToolBarHelper::cancel('delegate.cancel', 'JTOOLBAR_CLOSE');
 		}
 		else
 		{
-			ToolbarHelper::cancel('membersdelegate.cancel', 'JTOOLBAR_CLOSE');
+                    if ($layout == 'denounce') {    
+                        ToolBarHelper::save('membersdelegate.denounce', 'JTOOLBAR_SAVE');
+                    }
+                    if ($layout == 'reannounce') {    
+                        ToolBarHelper::save('membersdelegate.reannounce', 'JTOOLBAR_SAVE');
+                    }
+                    
+			ToolBarHelper::cancel('membersdelegate.cancel', 'JTOOLBAR_CANCEL');
 		}
 	}
 }

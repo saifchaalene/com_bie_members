@@ -20,6 +20,34 @@ $wa = $this->document->getWebAssetManager();
 $wa->useScript('keepalive')
 	->useScript('form.validate');
 HTMLHelper::_('bootstrap.tooltip');
+
+
+$document = Factory::getDocument();
+$document->addStyleSheet(Uri::root() . 'media/com_bie_members/css/form.css');
+?>
+<script type="text/javascript">
+	js = jQuery.noConflict();
+	js(document).ready(function () {
+		
+	});
+
+	Joomla.submitbutton = function (task) {
+		if (task == 'delegate.cancel') {
+			Joomla.submitform(task, document.getElementById('delegate-form'));
+		}
+		else {
+			
+			if (task != 'delegate.cancel' && document.formvalidator.isValid(document.id('delegate-form'))) {
+				
+				Joomla.submitform(task, document.getElementById('delegate-form'));
+			}
+			else {
+				alert('<?php echo $this->escape(Text::_('JGLOBAL_VALIDATION_FORM_FAILED')); ?>');
+			}
+		}
+	}
+</script>
+
 ?>
 
 <form
