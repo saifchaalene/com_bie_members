@@ -18,6 +18,8 @@ use \Joomla\CMS\Language\Text;
 use \Joomla\CMS\Session\Session;
 use Joomla\Utilities\ArrayHelper;
 
+HTMLHelper::_('jquery.framework');
+HTMLHelper::_('bootstrap.tooltip');
 
 ?>
 

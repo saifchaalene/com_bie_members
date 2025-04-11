@@ -78,7 +78,13 @@ class HtmlView extends BaseHtmlView
                 if ($this->item->id && $layout == 'reannounce') {
                     $this->form->setFieldAttribute('start_date','readonly','false'); 
                 }
-                
+                // JavaScript console logging for debug
+$document = Factory::getDocument();
+$itemJson = json_encode($this->item, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+if ($document instanceof \Joomla\CMS\Document\HtmlDocument) {
+	$document->addScriptDeclaration("console.log(' Delegate Item:', $itemJson);");
+}
+
 		$this->addToolbar();
 		parent::display($tpl);
 	}

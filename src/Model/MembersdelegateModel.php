@@ -123,7 +123,7 @@ class MembersdelegateModel extends AdminModel
     $user = $app->getIdentity();
 
     if (!$user->authorise('core.create', 'com_bie_members')) {
-        $app->enqueueMessage('❌ Not authorized to duplicate.', 'error');
+        $app->enqueueMessage(' Not authorized to duplicate.', 'error');
         throw new \Exception(Text::_('JERROR_CORE_CREATE_NOT_PERMITTED'));
     }
 
@@ -143,16 +143,16 @@ class MembersdelegateModel extends AdminModel
             $table->id = 0;
 
             if (!$table->check()) {
-                $app->enqueueMessage('⚠️ Table check failed: ' . $table->getError(), 'warning');
+                $app->enqueueMessage(' Table check failed: ' . $table->getError(), 'warning');
                 throw new \Exception($table->getError());
             }
 
             if (!$table->store()) {
-                $app->enqueueMessage('❌ Store failed: ' . $table->getError(), 'error');
+                $app->enqueueMessage(' Store failed: ' . $table->getError(), 'error');
                 throw new \Exception($table->getError());
             }
 
-            $app->enqueueMessage('✅ Record duplicated successfully.', 'message');
+            $app->enqueueMessage('Record duplicated successfully.', 'message');
 
             // Log the new ID after duplication
             $newId = (int) $table->id;
@@ -160,13 +160,13 @@ class MembersdelegateModel extends AdminModel
                 $doc->addScriptDeclaration("console.log('🆕 New duplicated record ID:', $newId);");
             }
         } else {
-            $app->enqueueMessage("❌ Could not load item with ID $pk.", 'error');
+            $app->enqueueMessage(" Could not load item with ID $pk.", 'error');
             throw new \Exception($table->getError());
         }
     }
 
     $this->cleanCache();
-    $app->enqueueMessage('🧹 Cache cleaned.', 'info');
+    $app->enqueueMessage('Cache cleaned.', 'info');
 
     // Final message in console
     if ($doc instanceof HtmlDocument) {

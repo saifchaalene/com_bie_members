@@ -19,8 +19,9 @@ use \Joomla\CMS\Language\Text;
 $wa = $this->document->getWebAssetManager();
 $wa->useScript('keepalive')
 	->useScript('form.validate');
-HTMLHelper::_('bootstrap.tooltip');
-
+	HTMLHelper::_('jquery.framework');
+	HTMLHelper::_('bootstrap.tooltip');
+	
 
 $document = Factory::getDocument();
 $document->addStyleSheet(Uri::root() . 'media/com_bie_members/css/form.css');
@@ -48,7 +49,7 @@ $document->addStyleSheet(Uri::root() . 'media/com_bie_members/css/form.css');
 	}
 </script>
 
-?>
+
 
 <form
 	action="<?php echo Route::_('index.php?option=com_bie_members&layout=edit&id=' . (int) $this->item->id); ?>"
