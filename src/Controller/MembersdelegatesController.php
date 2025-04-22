@@ -299,10 +299,10 @@ class MembersdelegatesController extends AdminController
 		}
 		$this->setRedirect(Route::_('index.php?option=com_bie_members&view=membersdelegates', false));
 	}
-
 	public function add()
-{
-    $this->setRedirect('index.php?option=com_bie_members&view=membersdelegate&layout=edit');
-}
+	{
+		$this->setRedirect('index.php?option=com_bie_members&view=individual&layout=edit');
+	}
+	
 
 }

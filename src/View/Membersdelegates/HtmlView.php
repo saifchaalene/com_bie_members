@@ -87,7 +87,7 @@ class HtmlView extends BaseHtmlView
 		ToolbarHelper::title(Text::_('COM_BIE_MEMBERS_TITLE_DELEGATES'), 'users');
 
 		if (Bie_membersUtils::allowEditDelegates()) {
-			ToolbarHelper::custom('membersdelegate.add', 'new', '', 'New Delegate / New Person', false);
+			ToolBarHelper::addNew('individual.add', 'New Delegate/ New Person');
 			ToolbarHelper::addNew('membership.edit', 'New Delegate/ Existing Person');
 			ToolbarHelper::custom('membersdelegates.denounce', 'exit', '', 'Denounce Delegate', false);
 			ToolbarHelper::custom('membersdelegates.reannounce', 'enter', '', 'Re-Announce Former Delegate', false);

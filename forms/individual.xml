@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<form addfieldprefix="Combiemembers\Component\Bie_members\Administrator\Field">
+  <fieldset>
+    <field name="id" type="text" readonly="true" class="readonly" default="0" description="JGLOBAL_FIELD_ID_DESC" />
+
+    <field name="prefix_id" default="13" type="sql"
+      query="SELECT value, label_en_US AS name FROM civicrm_prefix"
+      key_field="value" value_field="name"
+      label="COM_CRM_CONTACTS_FORM_LBL_INDIVIDUAL_PREFIX_ID"
+      description="COM_CRM_CONTACTS_FORM_DESC_INDIVIDUAL_PREFIX_ID"
+      hint="COM_CRM_CONTACTS_FORM_LBL_INDIVIDUAL_PREFIX_ID" />
+
+    <field name="first_name" type="text" required="true" filter="safehtml" size="50" maxlength="255"
+      label="COM_CRM_CONTACTS_FORM_LBL_INDIVIDUAL_FIRST_NAME"
+      description="COM_CRM_CONTACTS_FORM_DESC_INDIVIDUAL_FIRST_NAME"
+      hint="COM_CRM_CONTACTS_FORM_LBL_INDIVIDUAL_FIRST_NAME" />
+
+    <field name="last_name" type="text" required="true" filter="safehtml" size="50" maxlength="255"
+      label="COM_CRM_CONTACTS_FORM_LBL_INDIVIDUAL_LAST_NAME"
+      description="COM_CRM_CONTACTS_FORM_DESC_INDIVIDUAL_LAST_NAME"
+      hint="COM_CRM_CONTACTS_FORM_LBL_INDIVIDUAL_LAST_NAME" />
+
+    <field name="gender_id" default="4" type="list"
+      label="COM_CRM_CONTACTS_FORM_LBL_INDIVIDUAL_GENDER_ID"
+      description="COM_CRM_CONTACTS_FORM_DESC_INDIVIDUAL_GENDER_ID"
+      hint="COM_CRM_CONTACTS_FORM_LBL_INDIVIDUAL_GENDER_ID">
+      <option value="1">COM_CRM_CONTACTS_INDIVIDUALS_GENDER_ID_OPTION_1</option>
+      <option value="2">COM_CRM_CONTACTS_INDIVIDUALS_GENDER_ID_OPTION_2</option>
+      <option value="4">COM_CRM_CONTACTS_INDIVIDUALS_GENDER_ID_OPTION_4</option>
+    </field>
+
+    <field name="employer_id" type="foreignkey" input_type="list"
+      table="civicrm_organisations" key_field="id" value_field="display_name"
+      required="true" default="0"
+      label="COM_CRM_CONTACTS_FORM_LBL_INDIVIDUAL_EMPLOYER_ID"
+      description="COM_CRM_CONTACTS_FORM_DESC_INDIVIDUAL_EMPLOYER_ID" />
+
+    <field name="job_title" type="text" size="100" maxlength="255" filter="safehtml"
+      label="COM_CRM_CONTACTS_FORM_LBL_INDIVIDUAL_JOB_TITLE"
+      description="COM_CRM_CONTACTS_FORM_DESC_INDIVIDUAL_JOB_TITLE"
+      hint="COM_CRM_CONTACTS_FORM_LBL_INDIVIDUAL_JOB_TITLE" />
+
+    <field name="email" type="email" validate="email" size="100" maxlength="255"
+      label="COM_CRM_CONTACTS_FORM_LBL_INDIVIDUAL_EMAIL"
+      description="COM_CRM_CONTACTS_FORM_DESC_INDIVIDUAL_EMAIL" />
+
+    <field name="email2" type="email" validate="email" size="100" maxlength="255"
+      label="COM_CRM_CONTACTS_FORM_LBL_ORGANISATION_EMAIL_2"
+      description="COM_CRM_CONTACTS_FORM_LBL_ORGANISATION_EMAIL_2" />
+
+    <field name="street_address" type="text" size="100" maxlength="255" filter="safehtml"
+      label="COM_CRM_CONTACTS_FORM_LBL_INDIVIDUAL_STREET_ADDRESS"
+      description="COM_CRM_CONTACTS_FORM_DESC_INDIVIDUAL_STREET_ADDRESS" />
+
+    <field name="city" type="text" size="100" maxlength="255" filter="safehtml"
+      label="COM_CRM_CONTACTS_FORM_LBL_INDIVIDUAL_CITY"
+      description="COM_CRM_CONTACTS_FORM_DESC_INDIVIDUAL_CITY" />
+
+    <field name="postal_code" type="text" size="10" maxlength="10" filter="safehtml"
+      label="COM_CRM_CONTACTS_FORM_LBL_INDIVIDUAL_POSTAL_CODE"
+      description="COM_CRM_CONTACTS_FORM_DESC_INDIVIDUAL_POSTAL_CODE" />
+
+    <field name="country_id" type="foreignkey" input_type="list"
+      table="civicrm_country" key_field="id" value_field="name" default="0"
+      label="COM_CRM_CONTACTS_FORM_LBL_INDIVIDUAL_COUNTRY_ID"
+      description="COM_CRM_CONTACTS_FORM_DESC_INDIVIDUAL_COUNTRY_ID" />
+
+    <field name="group_id" type="foreignkey" required="true" default="2"
+      input_type="list" table="civicrm_group" key_field="id" value_field="title_en_US"
+      label="COM_CRM_CONTACTS_FORM_LBL_INDIVIDUAL_GROUP_ID"
+      description="COM_CRM_CONTACTS_FORM_LBL_INDIVIDUAL_GROUP_ID" />
+
+    <field name="prefered_language" type="foreignkey" required="true" default="en_US"
+      input_type="list" table="civicrm_active_languages" key_field="name" value_field="label_en_US"
+      label="COM_CRM_CONTACTS_FORM_LBL_INDIVIDUAL_PREFERED_LANGUAGE"
+      description="COM_CRM_CONTACTS_FORM_DESC_INDIVIDUAL_PREFERED_LANGUAGE" />
+
+  <field name="start_date"
+       type="calendar"
+       required="true"
+       format="%Y-%m-%d"
+       filter="user_utc"
+       showtime="false"
+       class="inputbox"
+       label="COM_BIE_DELEGATE_LBL_DELEGATE_START_DATE"
+       description="COM_BIE_DELEGATE_LBL_DELEGATE_START_DATE"/>
+
+    <field name="phone" type="text" size="20" maxlength="20"
+      label="COM_CRM_CONTACTS_FORM_LBL_PHONE_1"
+      description="COM_CRM_CONTACTS_FORM_LBL_PHONE_1" />
+
+    <field name="mobile_phone" type="text" size="20" maxlength="20"
+      label="COM_CRM_CONTACTS_FORM_LBL_PHONE_2"
+      description="COM_CRM_CONTACTS_FORM_LBL_PHONE_2" />
+
+    <field name="web" type="url" size="100" maxlength="250"
+      label="COM_CRM_CONTACTS_FORM_LBL_WEBSITE"
+      description="COM_CRM_CONTACTS_FORM_LBL_WEBSITE" />
+
+    <field name="facebook" type="url" size="100" maxlength="250"
+      label="COM_CRM_CONTACTS_FORM_LBL_FACEBOOK"
+      description="COM_CRM_CONTACTS_FORM_LBL_FACEBOOK" />
+
+    <field name="twitter" type="url" size="100" maxlength="250"
+      label="COM_CRM_CONTACTS_FORM_LBL_TWITTER"
+      description="COM_CRM_CONTACTS_FORM_LBL_TWITTER" />
+
+    <field name="note" type="textarea" filter="safehtml" rows="3" cols="50"
+      label="COM_CRM_CONTACTS_FORM_LBL_INDIVIDUAL_COMMENTS"
+      description="COM_CRM_CONTACTS_FORM_LBL_INDIVIDUAL_COMMENTS" />
+
+    <field name="ordering" type="text" />
+    <field name="state" default="1" type="list" label="JSTATUS" description="JFIELD_PUBLISHED_DESC">
+      <option value="1">JPUBLISHED</option>
+      <option value="0">JUNPUBLISHED</option>
+    </field>
+
+    <field name="dups_informed" type="hidden" default="0" />
+    <field name="location_type_id" type="hidden" default="2" />
+    <field name="checked_out" type="hidden" filter="unset" />
+    <field name="checked_out_time" type="hidden" default="0000-00-00 00:00:00" filter="unset" />
+    <field name="created_by" type="createdby" hidden="true" />
+    <field name="modified_by" type="modifiedby" hidden="true" />
+    <field name="version_note" type="text" size="45"
+      label="JGLOBAL_FIELD_VERSION_NOTE_LABEL"
+      description="JGLOBAL_FIELD_VERSION_NOTE_DESC" />
+  </fieldset>
+</form>
