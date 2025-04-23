@@ -12,8 +12,8 @@ $app  = Factory::getApplication();
 $wa   = $this->document->getWebAssetManager();
 
 $wa->useStyle('com_bie_members.admin')
-   ->useScript('com_bie_members.admin');
-
+   ->useScript('com_bie_members.admin')
+   ->useScript('joomla.dialog-autocreate'); 
 $user      = $app->getIdentity();
 $listOrder = $this->state->get('list.ordering');
 $listDirn  = $this->state->get('list.direction');
@@ -163,14 +163,27 @@ $this->filters  = ['view' => $this];
 						<?php endif; ?>
 
                         <td class="hidden-phone">
-                            <a class="btn-edit-module" href="javascript:void(0);"
-                               data-toggle="modal"
-                               data-target="#jabktmp-module" data-url="<?php echo $item->view_url; ?>"
-                               data-module="2" data-title="Detailed Information for: <?php echo $item->fullname; ?>">
-                                <span class="icon-info" title="Contact Information"></span>
-                            </a>
-                        </td>
+                        <?php
 
+
+$popupOptions = [
+    'popupType'  => 'iframe',
+    'textHeader' => Text::_('COM_BIE_MEMBERS_DELEGATE_DETAILS') . ': ' . $item->id,
+    'width'      => '70vw',
+    'height'     => '70vh',
+    'src'        => Route::_('index.php?option=com_bie_members&view=membersdelegate&id=' . (int) $item->id . '&tmpl=component'),
+                 
+
+];
+
+?>
+<a href="#" class="btn btn-sm btn-outline-info hasTooltip"
+   title="<?php echo Text::_('COM_BIE_MEMBERS_DELEGATES_VIEW_DETAILS'); ?>"
+   data-joomla-dialog='<?php echo htmlspecialchars(json_encode($popupOptions), ENT_QUOTES, 'UTF-8'); ?>'>
+   <span class="icon-info-circle" aria-hidden="true"></span>
+</a>
+
+                            </td>
                         <td scope="row" data-label="<?php echo Text::_('COM_BIE_MEMBERS_MEMBERSDELEGATES_COUNTRY'); ?>">
 							<?php if (isset($item->checked_out) && $item->checked_out && ($canEdit || $canChange)) : ?>
 								<?php echo HTMLHelper::_('jgrid.checkedout', $i, $item->uEditor, $item->checked_out_time, 'delegates.', $canCheckin); ?>
@@ -260,8 +273,27 @@ $this->filters  = ['view' => $this];
 		<?php echo HTMLHelper::_('form.token'); ?>
     </div>
 </form>
-<script type="text/javascript">
+<div class="modal fade" id="jabktmp-module" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-xl" style="max-width: 90vw;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">...</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="<?php echo Text::_('JCLOSE'); ?>"></button>
+            </div>
+            <div class="modal-body" style="min-height: 70vh;">
+                <iframe id="ja-md-edit" name="modalModule" src="" style="width:100%; height:100%;" frameborder="0"></iframe>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><?php echo Text::_('JCLOSE'); ?></button>
+            </div>
+        </div>
+    </div>
+</div>
 
+<script type="text/javascript">
+function refreshTable() {
+    location.reload();
+}
     function actionsNewsletter(val) {
         console.log(val);
 

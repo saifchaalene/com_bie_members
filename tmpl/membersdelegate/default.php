@@ -1,71 +1,45 @@
 <?php
 /**
  * @version    CVS: 1.0.0
- * @package    Com_Anand
- * @author     Super User <dev@component-creator.com>
- * @copyright  2023 Super User
+ * @package    Com_Bie_members
+ * @author     Tasos Triantis
  * @license    GNU General Public License version 2 or later; see LICENSE.txt
  */
 
-// No direct access
 defined('_JEXEC') or die;
 
-use \Joomla\CMS\HTML\HTMLHelper;
-use \Joomla\CMS\Factory;
-use \Joomla\CMS\Uri\Uri;
-use \Joomla\CMS\Router\Route;
-use \Joomla\CMS\Language\Text;
-use \Joomla\CMS\Session\Session;
-use Joomla\Utilities\ArrayHelper;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Factory;
 
-HTMLHelper::_('jquery.framework');
-HTMLHelper::_('bootstrap.tooltip');
-
+$delegate = $this->item;
 ?>
 
-<div class="item_fields">
+<div class="container py-3">
+    <h3><?php echo Text::_('COM_BIE_MEMBERS_DELEGATE_DETAILS'); ?></h3>
 
-	<table class="table">
-		
+    <div class="card p-3 mt-3">
+        <p><strong><?php echo Text::_('COM_BIE_MEMBERS_DELEGATES_FULLNAME'); ?>:</strong>
+            <?php echo htmlspecialchars($delegate->first_name . ' ' . $delegate->last_name); ?></p>
 
-	</table>
+        <p><strong><?php echo Text::_('COM_BIE_MEMBERS_DELEGATES_COUNTRY'); ?>:</strong>
+            <?php echo htmlspecialchars($delegate->country); ?></p>
 
+        <p><strong><?php echo Text::_('COM_BIE_MEMBERS_DELEGATES_ROLE'); ?>:</strong>
+            <?php echo htmlspecialchars($delegate->job_title); ?></p>
+
+        <p><strong><?php echo Text::_('COM_BIE_MEMBERS_DELEGATES_TYPE'); ?>:</strong>
+            <?php echo htmlspecialchars($delegate->type); ?></p>
+
+        <p><strong><?php echo Text::_('COM_BIE_MEMBERS_DELEGATES_START_DATE'); ?>:</strong>
+            <?php echo htmlspecialchars($delegate->start_date); ?></p>
+
+        <p><strong><?php echo Text::_('COM_BIE_MEMBERS_DELEGATES_END_DATE'); ?>:</strong>
+            <?php echo htmlspecialchars($delegate->end_date); ?></p>
+
+        <p><strong><?php echo Text::_('COM_BIE_MEMBERS_DELEGATES_EMAIL'); ?>:</strong>
+            <?php echo htmlspecialchars($delegate->primary_email); ?></p>
+
+        <p><strong><?php echo Text::_('COM_BIE_MEMBERS_DELEGATES_PHONE'); ?>:</strong>
+            <?php echo htmlspecialchars($delegate->phone); ?></p>
+    </div>
 </div>
-
-
-<script type="text/javascript">
-	js = jQuery.noConflict();
-	js(document).ready(function () {
-		
-	});
-
-	Joomla.submitbutton = function (task) {
-		if (task == 'delegate.cancel') {
-			Joomla.submitform(task, document.getElementById('delegate-form'));
-		}
-		else {
-			
-			if (task != 'delegate.cancel' && document.formvalidator.isValid(document.id('delegate-form'))) {
-				
-				Joomla.submitform(task, document.getElementById('delegate-form'));
-			}
-			else {
-				alert('<?php echo $this->escape(Text::_('JGLOBAL_VALIDATION_FORM_FAILED')); ?>');
-			}
-		}
-	}
-</script>
-
-<form
-	action="<?php echo Route::_('index.php?option=com_bie_members&view=delegates'); ?>"
-	method="post" enctype="multipart/form-data" name="adminForm" id="delegate-form" class="form-validate">
-
-	<div class="form-horizontal">
-            
-            <h4 class="alert alert-error">Please select a Delegate first</h4>        
-
-		<input type="hidden" name="task" value=""/>
-		<?php echo Html::_('form.token'); ?>
-
-	</div>
-</form>

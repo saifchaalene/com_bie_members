@@ -91,7 +91,12 @@ class MembersdelegateModel extends AdminModel
 		$layout = $input->get('layout');
 		$pk = !empty($pk) ? $pk : (int) $this->getState('delegate.id');
 		$item = null;
+		$app->enqueueMessage('🔍 ID utilisé dans getItem(): ' . $pk, 'info');
 
+		$doc = Factory::getDocument();
+		if ($doc instanceof HtmlDocument) {
+			$doc->addScriptDeclaration("console.log('🔍 ID utilisé dans getItem(): " . $pk . "');");
+		}
 		if ($layout === 'denounce') {
 			$item = $this->getCurrentDelegateItem($pk);
 			$app->enqueueMessage("\u2139 Loaded current delegate for denounce.", 'message');
