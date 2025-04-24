@@ -148,41 +148,77 @@ class IndividualModel extends AdminModel
 	}
 
 	protected function createSubEntities($contactId, $data)
-	{
-		$fields = [
-			'Email' => ['email', 'email2'],
-			'Phone' => ['phone', 'mobile_phone'],
-			'Website' => ['web', 'facebook', 'twitter'],
-		];
-		foreach ($fields as $entity => $keys) {
-			foreach ($keys as $key) {
-				if (!empty($data[$key])) {
-					$params = ['contact_id' => $contactId];
-					switch ($entity) {
-						case 'Email':
-							$params['email'] = $data[$key];
-							$params['location_type_id'] = ($key === 'email') ? 2 : 4;
-							$params['is_primary'] = ($key === 'email') ? 1 : 0;
-							break;
-						case 'Phone':
-							$params['phone'] = $data[$key];
-							$params['phone_type_id'] = ($key === 'mobile_phone') ? 2 : 1;
-							$params['location_type_id'] = 2;
-							$params['is_primary'] = ($key === 'phone') ? 1 : 0;
-							break;
-						case 'Website':
-							$params['url'] = $data[$key];
-							$params['website_type_id'] = match ($key) {
-								'web' => 1,
-								'facebook' => 3,
-								'twitter' => 11,
-							};
-							break;
-					}
-					civicrm_api3($entity, 'create', $params);
+{/*
+	$fields = [
+		'Email' => ['email', 'email2'],
+		'Phone' => ['phone', 'mobile_phone'],
+		'Website' => ['web', 'facebook', 'twitter'],
+	];
+
+	foreach ($fields as $entity => $keys) {
+		foreach ($keys as $key) {
+			if (!empty($data[$key])) {
+				$params = ['contact_id' => $contactId];
+				switch ($entity) {
+					case 'Email':
+						$params['email'] = $data[$key];
+						$params['location_type_id'] = ($key === 'email') ? 2 : 4;
+						$params['is_primary'] = ($key === 'email') ? 1 : 0;
+						break;
+					case 'Phone':
+						$params['phone'] = $data[$key];
+						$params['phone_type_id'] = ($key === 'mobile_phone') ? 2 : 1;
+						$params['location_type_id'] = 2;
+						$params['is_primary'] = ($key === 'phone') ? 1 : 0;
+						break;
+					case 'Website':
+						$params['url'] = $data[$key];
+						switch ($key) {
+							case 'web':
+								$params['website_type_id'] = 1;
+								break;
+							case 'facebook':
+								$params['website_type_id'] = 3;
+								break;
+							case 'twitter':
+								$params['website_type_id'] = 11;
+								break;
+						}
+						break;
 				}
+				civicrm_api3($entity, 'create', $params);
 			}
 		}
+	}
+
+	// Address
+	if (!empty($data['street_address'])) {
+		civicrm_api3('Address', 'create', [
+			'contact_id' => $contactId,
+			'location_type_id' => 2,
+			'city' => $data['city'],
+			'postal_code' => $data['postal_code'],
+			'country_id' => $data['country_id'],
+			'address' => $data['street_address'],
+			'supplemental_address_1' => $data['supplemental_address_1'],
+			'supplemental_address_2' => $data['supplemental_address_2'],
+			'is_primary' => 1,
+		]);
+	}
+
+	// Membership
+	$civiUser = Bie_membersUtils::getCiviCRMUser();
+	civicrm_api3('Membership', 'create', [
+		'contact_id' => $contactId,
+		'membership_type_id' => 2,
+		'status_id' => 2,
+		'is_override' => 1,
+		'start_date' => Bie_membersUtils::isodateformat($data['start_date']),
+		'join_date' => Bie_membersUtils::isodateformat($data['start_date']),
+		'userId' => $civiUser->contact_id,
+	]);
+}
+
 
 		// Address
 		if (!empty($data['street_address'])) {
@@ -209,7 +245,7 @@ class IndividualModel extends AdminModel
 			'start_date' => Bie_membersUtils::isodateformat($data['start_date']),
 			'join_date' => Bie_membersUtils::isodateformat($data['start_date']),
 			'userId' => $civiUser->contact_id,
-		]);
+		]);*/
 	}
 
 	protected function checkforSimilarities($data): string

@@ -165,23 +165,24 @@ $this->filters  = ['view' => $this];
                         <td class="hidden-phone">
                         <?php
 
-
 $popupOptions = [
     'popupType'  => 'iframe',
-    'textHeader' => Text::_('COM_BIE_MEMBERS_DELEGATE_DETAILS') . ': ' . $item->id,
+    'textHeader' => Text::_('Detailed Information for : ') .   $item->fullname,
     'width'      => '70vw',
     'height'     => '70vh',
-    'src'        => Route::_('index.php?option=com_bie_members&view=membersdelegate&id=' . (int) $item->id . '&tmpl=component'),
-                 
+  'src' => 'index.php?option=com_civicrm&task=civicrm/contact/view&reset=1&tmpl=popup&cid=' . (int) $item->id,
 
 ];
+
 
 ?>
 <a href="#" class="btn btn-sm btn-outline-info hasTooltip"
    title="<?php echo Text::_('COM_BIE_MEMBERS_DELEGATES_VIEW_DETAILS'); ?>"
-   data-joomla-dialog='<?php echo htmlspecialchars(json_encode($popupOptions), ENT_QUOTES, 'UTF-8'); ?>'>
+   data-joomla-dialog='<?php echo htmlspecialchars(json_encode($popupOptions), ENT_QUOTES, "UTF-8"); ?>'>
    <span class="icon-info-circle" aria-hidden="true"></span>
 </a>
+
+
 
                             </td>
                         <td scope="row" data-label="<?php echo Text::_('COM_BIE_MEMBERS_MEMBERSDELEGATES_COUNTRY'); ?>">
