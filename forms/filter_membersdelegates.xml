@@ -22,9 +22,9 @@
                key_field="id"
                value_field="name_fr"
                order="name_fr ASC"
-               default=""
+               default="SELECT_COUNTRY"
                onchange="this.form.submit();">
-            <option value="">SELECT_COUNTRY</option>
+            <option value="">Select an option</option>
         </field>
 
         <field name="gender_id" label="COM_BIE_MEMBERS_DELEGATES_GENDER_ID" type="list" onchange="this.form.submit();" default="">
@@ -38,7 +38,7 @@
                label="COM_BIE_BULLETIN_BULLETININDIVIDUALS_NEWSLETTER_TITLE"
                description="COM_BIE_BULLETIN_BULLETININDIVIDUALS_NEWSLETTER_DESC"
                type="list" onchange="this.form.submit();" default="">
-            <option value="">COM_BIE_BULLETIN_BULLETININDIVIDUALS_NEWSLETTER_FILTER</option>
+            <option value="">- Select if Subscribed -</option>
             <option value="1">COM_BIE_BULLETIN_BULLETININDIVIDUALS_NEWSLETTER_STATUS_1</option>
             <option value="2">COM_BIE_BULLETIN_BULLETININDIVIDUALS_NEWSLETTER_STATUS_0</option>
             <option value="4">COM_BIE_BULLETIN_BULLETININDIVIDUALS_NEWSLETTER_STATUS_4</option>

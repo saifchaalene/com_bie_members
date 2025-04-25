@@ -291,6 +291,7 @@ $popupOptions = [
     </div>
 </div>
 
+
 <script type="text/javascript">
 function refreshTable() {
     location.reload();
