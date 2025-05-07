@@ -164,20 +164,16 @@ $this->filters  = ['view' => $this];
 
                         <td class="hidden-phone">
                         <?php
-
 $popupOptions = [
     'popupType'  => 'iframe',
-    'textHeader' => Text::_('Detailed Information for : ') .   $item->fullname,
+    'textHeader' => Text::_('Detailed Information for : ') . $item->fullname,
     'width'      => '70vw',
     'height'     => '70vh',
-  'src' => 'index.php?option=com_civicrm&task=civicrm/contact/view&reset=1&tmpl=popup&cid=' . (int) $item->id,
-
+    'src'        => '/administrator/components/com_bie_members/media/angular/index.html?cid=' . (int) $item->id, 
 ];
-
-
 ?>
 <a href="#" class="btn btn-sm btn-outline-info hasTooltip"
-   title="<?php echo Text::_('COM_BIE_MEMBERS_DELEGATES_VIEW_DETAILS'); ?>"
+   title="View in Angular"
    data-joomla-dialog='<?php echo htmlspecialchars(json_encode($popupOptions), ENT_QUOTES, "UTF-8"); ?>'>
    <span class="icon-info-circle" aria-hidden="true"></span>
 </a>
@@ -310,7 +306,7 @@ function refreshTable() {
             }
         }
     }
-
+  
     jQuery(document).ready(function () {
         jQuery('#clear-search-button').on('click', function () {
             jQuery('#filter_search').val('');
