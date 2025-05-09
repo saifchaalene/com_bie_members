@@ -6,26 +6,38 @@ namespace Combiemembers\Component\Bie_members\Administrator\Controller;
 use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Controller\BaseController;
 use Joomla\CMS\Response\JsonResponse;
+use Joomla\CMS\Language\Text;
+use Joomla\CMS\Session\Session; 
 
 class UserController extends BaseController
 {
     public function getCurrent(): void
     {
-        $user = Factory::getApplication()->getIdentity();
-
+        $app = Factory::getApplication();
+    
+        $app->mimeType = 'application/json';
+        $app->setHeader('Content-Type', $app->mimeType . '; charset=' . $app->charSet);
+        $app->sendHeaders();
+    
+        if (!Session::checkToken('get')) {
+            echo new JsonResponse(null, Text::_('JINVALID_TOKEN'), true);
+            $app->close();
+        }
+    
+        $user = $app->getIdentity();
+        if ($user->guest) {
+            echo new JsonResponse(null, Text::_('JERROR_ALERTNOAUTHOR'), true);
+            $app->close();
+        }
+    
         echo new JsonResponse([
             'id'        => $user->id,
             'name'      => $user->name,
             'username'  => $user->username,
             'email'     => $user->email,
-            'logged_in' => !$user->guest,
+            'logged_in' => true,
         ]);
-
-        Factory::getApplication()->close(); 
-    }
-
-    public function allowTask(string $task): bool
-    {
-        return $task === 'getCurrent' || parent::allowTask($task);
+    
+        $app->close();
     }
 }
