@@ -27,6 +27,6 @@ $tokenValue = '1';
   <app-root></app-root>
 
   <script type="module" src="<?= $base ?>polyfills-FFHMD2TL.js"></script>
-  <script type="module" src="<?= $base ?>main-2TNOIPKX.js"></script>
+  <script type="module" src="<?= $base ?>main-PMOIIV3P.js"></script>
 </body>
 </html>

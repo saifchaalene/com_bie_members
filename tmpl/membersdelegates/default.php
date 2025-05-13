@@ -30,6 +30,7 @@ $sortFields     = $this->getSortFields();
 $this->sidebar  = LayoutHelper::render('joomla.searchtools.default', ['view' => $this]);
 $this->hideSearchBox = false;
 $this->filters  = ['view' => $this];
+$session = Factory::getApplication()->getSession(); 
 ?>
 
 
@@ -172,7 +173,8 @@ $popupOptions = [
     'width'      => '70vw',
     'height'     => '70vh',
     'src'        => '/administrator/index.php?option=com_bie_members&view=angular&tmpl=component&cid=' . $cid,
-];
+];  
+
 ?>
 <a href="#" class="btn btn-sm btn-outline-info hasTooltip"
    title="View in Angular"

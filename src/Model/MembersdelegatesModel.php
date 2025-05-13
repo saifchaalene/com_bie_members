@@ -176,6 +176,50 @@ class MembersdelegatesModel extends ListModel
 		
 	}
 
+
+
+
+
+
+
+    
+
+    public function getContactDataById(int $id)
+    {
+        $db    = $this->getDbo();
+        $query = $db->getQuery(true);
+
+        $query->select('a.*')
+              ->from($db->quoteName('civicrm_delegates', 'a'))
+              ->where($db->quoteName('a.id') . ' = :id')
+              ->bind(':id', $id, ParameterType::INTEGER);
+
+        $db->setQuery($query);
+
+        try {
+            $row = $db->loadObject();
+
+            if ($row) {
+                $row->fullname = trim($row->first_name . ' ' . $row->last_name);
+                $row->phones   = $this->getPhones($row->id);
+                $row->mails    = $this->getMails($row->id);
+                $row->notes    = $this->getNumNotes($row->id);
+
+                return $row;
+            }
+        } catch (\RuntimeException $e) {
+            Factory::getApplication()->enqueueMessage('Error fetching contact: ' . $e->getMessage(), 'error');
+        }
+
+        return null;
+    }
+
+
+
+
+    
+    
+
 	/**
 	 * Build an SQL query to load the list data.
 	 *
