@@ -39,6 +39,9 @@ class ContactController extends BaseController
         $this->app->setHeader('Content-Type', $this->app->mimeType . '; charset=' . $this->app->charSet);
         $this->app->sendHeaders();
 
+   
+
+
         $id = $this->input->getInt('id');
 
         if (!$id) {

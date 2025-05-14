@@ -166,14 +166,17 @@ $session = Factory::getApplication()->getSession();
                         <td class="hidden-phone">
                         <?php
 $cid = (int) $item->id;
+$tokenKey = Session::getFormToken();
 
 $popupOptions = [
-    'popupType'  => 'iframe',
-    'textHeader' => Text::_('Detailed Information for : ') . $item->fullname,
-    'width'      => '70vw',
-    'height'     => '70vh',
-    'src'        => '/administrator/index.php?option=com_bie_members&view=angular&tmpl=component&cid=' . $cid,
-];  
+  'popupType'  => 'iframe',
+  'textHeader' => 'Details',
+   'width'  => '90vw',
+  'height' => '70vh',
+  'src'        => '/administrator/index.php?option=com_bie_members&view=angular&tmpl=component'
+                . '&cid=' . $cid
+               
+];
 
 ?>
 <a href="#" class="btn btn-sm btn-outline-info hasTooltip"
