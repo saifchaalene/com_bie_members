@@ -182,7 +182,26 @@ class MembersdelegatesModel extends ListModel
 
 
 
-    
+    public function getAddress(int $contactId): ?object
+{
+    $db = $this->getDbo();
+    $query = $db->getQuery(true);
+
+    $query->select('*')
+          ->from($db->quoteName('civicrm_address'))
+          ->where($db->quoteName('contact_id') . ' = :contactId')
+          ->where($db->quoteName('is_primary') . ' = 1')
+          ->bind(':contactId', $contactId, ParameterType::INTEGER);
+
+    $db->setQuery($query);
+
+    try {
+        return $db->loadObject(); 
+    } catch (\RuntimeException $e) {
+        Factory::getApplication()->enqueueMessage('Error fetching address: ' . $e->getMessage(), 'error');
+        return null;
+    }
+}
 
     public function getContactDataById(int $id)
     {
@@ -204,7 +223,7 @@ class MembersdelegatesModel extends ListModel
                 $row->phones   = $this->getPhones($row->id);
                 $row->mails    = $this->getMails($row->id);
                 $row->notes    = $this->getNumNotes($row->id);
-
+                $row->address  = $this->getAddress($row->id); 
                 return $row;
             }
         } catch (\RuntimeException $e) {

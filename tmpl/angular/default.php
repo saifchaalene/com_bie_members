@@ -21,12 +21,12 @@ $tokenValue = '1';
   <base href="<?= Uri::base(true) ?>/index.php?option=com_bie_members&view=angular&tmpl=component&">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" href="<?= $base ?>favicon.ico">
-  <link rel="stylesheet" href="<?= $base ?>styles-UIK6GW47.css">
+  <link rel="stylesheet" href="<?= $base ?>styles-DPNG56OS.css">
 </head>
 <body>
   <app-root></app-root>
 
   <script type="module" src="<?= $base ?>polyfills-EJ46DL77.js"></script>
-  <script type="module" src="<?= $base ?>main-Y3JDBFZQ.js"></script>
+  <script type="module" src="<?= $base ?>main-GJDATP7R.js"></script>
 </body>
 </html>

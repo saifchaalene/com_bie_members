@@ -7,14 +7,11 @@ namespace Combiemembers\Component\Bie_members\Administrator\Controller;
 use Joomla\CMS\Factory;
 use Joomla\CMS\MVC\Controller\BaseController;
 use Joomla\CMS\Response\JsonResponse;
-use Joomla\CMS\Language\Text;
-use Joomla\CMS\Session\Session;
 use Joomla\CMS\MVC\Factory\MVCFactoryInterface;
-use Joomla\CMS\MVC\Model\BaseDatabaseModel;
 use Joomla\CMS\Dispatcher\ComponentDispatcherFactoryInterface;
 use Joomla\CMS\Application\CMSApplicationInterface;
 use Joomla\Input\Input;
-
+use Joomla\Database\ParameterType;
 use Combiemembers\Component\Bie_members\Administrator\Model\MembersdelegatesModel;
 
 class ContactController extends BaseController
@@ -29,7 +26,6 @@ class ContactController extends BaseController
         ComponentDispatcherFactoryInterface $dispatcherFactory = null
     ) {
         parent::__construct($config, $factory, $app, $input, $dispatcherFactory);
-
         $this->model = $this->getModel('Membersdelegates');
     }
 
@@ -38,9 +34,6 @@ class ContactController extends BaseController
         $this->app->mimeType = 'application/json';
         $this->app->setHeader('Content-Type', $this->app->mimeType . '; charset=' . $this->app->charSet);
         $this->app->sendHeaders();
-
-   
-
 
         $id = $this->input->getInt('id');
 
@@ -58,5 +51,54 @@ class ContactController extends BaseController
         }
 
         $this->app->close();
+    }
+
+   
+    public function getIdentityCardUrl(): void
+    {
+        $contactId = $this->input->getInt('cid');
+        $url = self::getSecureIdentityCardUrl($contactId);
+
+        echo new JsonResponse(['success' => true, 'url' => $url]);
+        $this->app->close();
+    }
+
+    public static function getSecureIdentityCardUrl(int $contactId): ?string
+    {
+        require_once JPATH_ADMINISTRATOR . '/components/com_civicrm/civicrm.settings.php';
+        require_once JPATH_ADMINISTRATOR . '/components/com_civicrm/civicrm/CRM/Core/Config.php';
+        \CRM_Core_Config::singleton();
+
+        $db = Factory::getDbo();
+
+        $query = $db->getQuery(true)
+            ->select($db->quoteName(['id', 'filepname']))
+            ->from($db->quoteName('civicrm_contacts_identity_card'))
+            ->where($db->quoteName('contact_id') . ' = :contactId')
+            ->bind(':contactId', $contactId, ParameterType::INTEGER);
+
+        $db->setQuery($query);
+        $row = $db->loadAssoc();
+
+        if (!$row || empty($row['filepname'])) {
+            return null;
+        }
+
+        $fileId = \CRM_Core_DAO::getFieldValue('CRM_Core_DAO_File', $row['filepname'], 'id', 'uri');
+        if (!$fileId) {
+            return null;
+        }
+
+        try {
+            $result = civicrm_api3('Attachment', 'getvalue', [
+                'return' => 'url',
+                'id' => $fileId,
+                'check_permissions' => 0,
+            ]);
+            return $result;
+        } catch (\CiviCRM_API3_Exception $e) {
+            \Joomla\CMS\Factory::getApplication()->enqueueMessage('CiviCRM API error: ' . $e->getMessage(), 'error');
+            return null;
+        }
     }
 }

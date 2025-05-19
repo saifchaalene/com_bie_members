@@ -166,13 +166,13 @@ $session = Factory::getApplication()->getSession();
                         <td class="hidden-phone">
                         <?php
 $cid = (int) $item->id;
-$tokenKey = Session::getFormToken();
+//$tokenKey = Session::getFormToken();
 
 $popupOptions = [
   'popupType'  => 'iframe',
-  'textHeader' => 'Details',
-   'width'  => '90vw',
-  'height' => '70vh',
+  'textHeader' => 'Detailed Information for: ' . $item->fullname,
+   'width'  => '60vw',
+  'height' => '90vh',
   'src'        => '/administrator/index.php?option=com_bie_members&view=angular&tmpl=component'
                 . '&cid=' . $cid
                
