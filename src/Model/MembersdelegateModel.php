@@ -44,7 +44,7 @@ class MembersdelegateModel extends AdminModel
 		);
 	
 		if (empty($form)) {
-			Factory::getApplication()->enqueueMessage('❌ Failed to load form.', 'error');
+			Factory::getApplication()->enqueueMessage('Failed to load form.', 'error');
 			return false;
 		}
 	
@@ -95,7 +95,7 @@ class MembersdelegateModel extends AdminModel
 
 		$doc = Factory::getDocument();
 		if ($doc instanceof HtmlDocument) {
-			$doc->addScriptDeclaration("console.log('🔍 ID utilisé dans getItem(): " . $pk . "');");
+			$doc->addScriptDeclaration("console.log(' ID utilisé dans getItem(): " . $pk . "');");
 		}
 		if ($layout === 'denounce') {
 			$item = $this->getCurrentDelegateItem($pk);
@@ -142,7 +142,7 @@ class MembersdelegateModel extends AdminModel
             $json = json_encode($originalData, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
 
             if ($doc instanceof HtmlDocument) {
-                $doc->addScriptDeclaration("console.log('🧾 Original record for duplication (ID $pk):', $json);");
+                $doc->addScriptDeclaration("console.log(' Original record for duplication (ID $pk):', $json);");
             }
 
             $table->id = 0;
@@ -162,7 +162,7 @@ class MembersdelegateModel extends AdminModel
             // Log the new ID after duplication
             $newId = (int) $table->id;
             if ($doc instanceof HtmlDocument) {
-                $doc->addScriptDeclaration("console.log('🆕 New duplicated record ID:', $newId);");
+                $doc->addScriptDeclaration("console.log('New duplicated record ID:', $newId);");
             }
         } else {
             $app->enqueueMessage(" Could not load item with ID $pk.", 'error');
@@ -175,7 +175,7 @@ class MembersdelegateModel extends AdminModel
 
     // Final message in console
     if ($doc instanceof HtmlDocument) {
-        $doc->addScriptDeclaration("console.log('🎉 Duplication process complete.');");
+        $doc->addScriptDeclaration("console.log('Duplication process complete.');");
     }
 
     return true;
